@@ -2,11 +2,12 @@ package com.ubbackend.controller;
 
 import com.ubbackend.model.Student;
 import com.ubbackend.services.StudentService;
+import com.ubbackend.servicesImpl.StudentServiceImpl;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class StudentController {
 
     @GetMapping("Students")
     public ResponseEntity<List<Student>> getStudents() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
     }
 
     @GetMapping("/student/{id}")

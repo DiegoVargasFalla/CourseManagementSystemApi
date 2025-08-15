@@ -35,10 +35,11 @@ public class Student {
     @JsonManagedReference
     private List<Grade> notesList;
 
+
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -46,7 +47,6 @@ public class Student {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -54,7 +54,6 @@ public class Student {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -62,7 +61,6 @@ public class Student {
     public Long getDni() {
         return dni;
     }
-
     public void setDni(Long dni) {
         this.dni = dni;
     }
@@ -70,7 +68,6 @@ public class Student {
     public int getNumSemester() {
         return numSemester;
     }
-
     public void setNumSemester(int numSemester) {
         this.numSemester = numSemester;
     }
@@ -78,7 +75,6 @@ public class Student {
     public Float getAverage() {
         return average;
     }
-
     public void setAverage(Float average) {
         this.average = average;
     }
@@ -86,7 +82,6 @@ public class Student {
     public List<Course> getCourseList() {
         return courseList;
     }
-
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
@@ -94,7 +89,6 @@ public class Student {
     public List<Grade> getNotesList() {
         return notesList;
     }
-
     public void setNotesList(List<Grade> notesList) {
         this.notesList = notesList;
     }

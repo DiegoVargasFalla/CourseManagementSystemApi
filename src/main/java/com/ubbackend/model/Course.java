@@ -12,7 +12,9 @@ public class Course {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private float average;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade ={ CascadeType.PERSIST, CascadeType.MERGE })
@@ -23,10 +25,11 @@ public class Course {
     @JsonManagedReference
     private List<Grade> notes;
 
+
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -34,7 +37,6 @@ public class Course {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -42,7 +44,6 @@ public class Course {
     public float getAverage() {
         return average;
     }
-
     public void setAverage(float average) {
         this.average = average;
     }
@@ -50,7 +51,6 @@ public class Course {
     public List<Student> getListStudent() {
         return listStudent;
     }
-
     public void setListStudent(List<Student> listStudent) {
         this.listStudent = listStudent;
     }
@@ -58,7 +58,6 @@ public class Course {
     public List<Grade> getNotes() {
         return notes;
     }
-
     public void setNotes(List<Grade> notes) {
         this.notes = notes;
     }
