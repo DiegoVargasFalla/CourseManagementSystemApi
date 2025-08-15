@@ -39,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
             if(studentRepository.findByDni(studentDTO.getDni()).isEmpty()) {
                 studentEntity.setDni(studentDTO.getDni());
             } else {
-                throw new ResourceNotCreatedException("Dni is already in use");
+                throw new ResourceNotCreatedException("Dni is already used");
             }
 
             courseEntity.addStudent(studentEntity);

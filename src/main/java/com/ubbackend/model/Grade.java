@@ -22,8 +22,6 @@ public class Grade {
     @JoinColumn(name = "courseId")
     @JsonBackReference
     private Course course;
-
-
     
     public Long getId() {
         return id;
