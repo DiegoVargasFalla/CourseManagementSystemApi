@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +25,8 @@ public class StudentController {
     }
 
     @GetMapping("Students")
-<<<<<<< HEAD
-    public ResponseEntity<List<Student>> getStudents() {
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
-=======
     public ResponseEntity<List<StudentEntity>> getStudents() {
         return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464
     }
 
     @GetMapping("/student/{id}")

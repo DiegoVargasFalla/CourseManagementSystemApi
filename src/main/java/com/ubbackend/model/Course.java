@@ -19,7 +19,7 @@ public class Course {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade ={ CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> listStudent;
+    private List<StudentEntity> listStudent;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
     @JsonManagedReference
@@ -48,10 +48,10 @@ public class Course {
         this.average = average;
     }
 
-    public List<Student> getListStudent() {
+    public List<StudentEntity> getListStudent() {
         return listStudent;
     }
-    public void setListStudent(List<Student> listStudent) {
+    public void setListStudent(List<StudentEntity> listStudent) {
         this.listStudent = listStudent;
     }
 

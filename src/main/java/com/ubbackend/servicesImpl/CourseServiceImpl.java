@@ -1,8 +1,5 @@
 package com.ubbackend.servicesImpl;
 
-<<<<<<< HEAD
-import com.ubbackend.model.Course;
-=======
 import com.ubbackend.DTOs.CourseDTO;
 import com.ubbackend.DTOs.CourseUpdateDTO;
 import com.ubbackend.DTOs.NewStudentDTO;
@@ -13,7 +10,6 @@ import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.StudentEntity;
 import com.ubbackend.repository.CourseRepository;
 import com.ubbackend.repository.StudentRepository;
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464
 import com.ubbackend.services.CourseService;
 
 import java.util.ArrayList;
@@ -26,9 +22,6 @@ import java.util.Optional;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-<<<<<<< HEAD
-}
-=======
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
 
@@ -111,4 +104,3 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 }
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464

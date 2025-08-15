@@ -89,26 +89,16 @@ public class StudentEntity {
     public Set<GradeEntity> getGrades() {
         return grades;
     }
-<<<<<<< HEAD:src/main/java/com/ubbackend/model/Student.java
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
-=======
 
     public void setGrades(Set<GradeEntity> notesList) {
         this.grades = notesList;
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464:src/main/java/com/ubbackend/model/StudentEntity.java
     }
 
     public Set<CourseEntity> getCourses() {
         return courses;
     }
-<<<<<<< HEAD:src/main/java/com/ubbackend/model/Student.java
-    public void setNotesList(List<Grade> notesList) {
-        this.notesList = notesList;
-=======
 
     public void setCourses(Set<CourseEntity> courseEntityList) {
         this.courses = courseEntityList;
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464:src/main/java/com/ubbackend/model/StudentEntity.java
     }
 }

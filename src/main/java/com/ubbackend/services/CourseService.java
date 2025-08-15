@@ -1,13 +1,5 @@
 package com.ubbackend.services;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-
-import com.ubbackend.model.Course;
-
-public interface CourseService {
-    //ArrayList<Course> getCourses();
-=======
 import com.ubbackend.DTOs.CourseDTO;
 import com.ubbackend.DTOs.CourseUpdateDTO;
 import com.ubbackend.DTOs.NewStudentDTO;
@@ -23,5 +15,4 @@ public interface CourseService {
     void deleteCourse(Long id) throws Exception;
     void updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception;
     Optional<CourseEntity> newStudent(NewStudentDTO newStudentDTO) throws Exception;
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464
 }

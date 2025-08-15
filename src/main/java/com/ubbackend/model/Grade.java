@@ -16,7 +16,7 @@ public class Grade {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "studentId")
     @JsonBackReference
-    private Student student;
+    private StudentEntity studentEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId")
@@ -39,11 +39,11 @@ public class Grade {
         this.grade = grade;
     }
 
-    public Student getStudent() {
-        return student;
+    public StudentEntity getStudent() {
+        return studentEntity;
     }
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudent(StudentEntity studentEntity) {
+        this.studentEntity = studentEntity;
     }
 
     public Course getCourse() {

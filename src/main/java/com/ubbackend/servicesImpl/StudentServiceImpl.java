@@ -1,14 +1,10 @@
 package com.ubbackend.servicesImpl;
 
-<<<<<<< HEAD
-import com.ubbackend.model.Student;
-=======
 import com.ubbackend.DTOs.StudentDTO;
 import com.ubbackend.Exceptions.ResourceNotCreatedException;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.StudentEntity;
 import com.ubbackend.repository.CourseRepository;
->>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464
 import com.ubbackend.repository.StudentRepository;
 import com.ubbackend.services.StudentService;
 
@@ -20,12 +16,6 @@ import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    private final StudentRepository studentRepository;
-
-    public StudentServiceImpl(StudentRepository studentRepository){
-        this.studentRepository = studentRepository;
-    }
-
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
 
@@ -57,10 +47,5 @@ public class StudentServiceImpl implements StudentService {
         } else {
             throw new ResourceNotCreatedException("Course not exist");
         }
-    }
-
-    @Override
-    public List<Student> getStudents() {
-        return studentRepository.findAll();
     }
 }
