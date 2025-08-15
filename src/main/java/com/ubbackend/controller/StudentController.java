@@ -24,9 +24,9 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("Students")
+    @GetMapping("/students")
     public ResponseEntity<List<StudentEntity>> getStudents() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
     }
 
     @GetMapping("/student/{id}")

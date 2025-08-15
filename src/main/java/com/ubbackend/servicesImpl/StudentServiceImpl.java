@@ -48,4 +48,9 @@ public class StudentServiceImpl implements StudentService {
             throw new ResourceNotCreatedException("Course not exist");
         }
     }
+
+    @Override
+    public List<StudentEntity> getStudents() {
+        return studentRepository.findAll();
+    }
 }
