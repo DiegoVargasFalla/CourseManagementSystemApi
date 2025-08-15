@@ -1,9 +1,7 @@
 package com.ubbackend.controller;
 
-import com.ubbackend.DTOs.AccessCodeResponseDTO;
 import com.ubbackend.DTOs.CreateAccessCodeDTO;
 import com.ubbackend.DTOs.UserEntityDTO;
-import com.ubbackend.model.AccessCodeEntity;
 import com.ubbackend.services.AccessCodeService;
 import com.ubbackend.services.UserService;
 import org.springframework.http.HttpStatus;

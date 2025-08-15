@@ -37,11 +37,15 @@ public class UserServiceImpl implements UserService {
         if(optionalUserEntity.isPresent()) {
             throw new UserExistException("User already exist");
         } else if(userEntityDTO.getAccessCode() != null) {
+
             Optional<AccessCodeEntity> accessCodeExisting = accessCodeRepository.findByCode(userEntityDTO.getAccessCode());
+
             if(accessCodeExisting.isPresent() ) {
+
                 AccessCodeEntity accessCodeEntity = accessCodeExisting.get();
 
                 if(accessCodeEntity.getActive()) {
+
                     accessCodeEntity.setActive(false);
 
                     RolEntity rolEntity = new RolEntity();
