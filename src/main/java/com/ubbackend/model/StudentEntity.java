@@ -1,13 +1,20 @@
 package com.ubbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Entity
 @Table( name = "student")
-public class Student {
+public class StudentEntity {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -28,12 +35,12 @@ public class Student {
     @Column(nullable = false)
     private Float average = 0.0F;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "listStudent")
-    private List<Course> courseList;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "students")
+    private Set<CourseEntity> courses = new HashSet<>();
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "studentEntity")
     @JsonManagedReference
-    private List<Grade> notesList;
+    private Set<GradeEntity> grades = new HashSet<>();
 
 
 
@@ -79,17 +86,29 @@ public class Student {
         this.average = average;
     }
 
-    public List<Course> getCourseList() {
-        return courseList;
+    public Set<GradeEntity> getGrades() {
+        return grades;
     }
+<<<<<<< HEAD:src/main/java/com/ubbackend/model/Student.java
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
+=======
+
+    public void setGrades(Set<GradeEntity> notesList) {
+        this.grades = notesList;
+>>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464:src/main/java/com/ubbackend/model/StudentEntity.java
     }
 
-    public List<Grade> getNotesList() {
-        return notesList;
+    public Set<CourseEntity> getCourses() {
+        return courses;
     }
+<<<<<<< HEAD:src/main/java/com/ubbackend/model/Student.java
     public void setNotesList(List<Grade> notesList) {
         this.notesList = notesList;
+=======
+
+    public void setCourses(Set<CourseEntity> courseEntityList) {
+        this.courses = courseEntityList;
+>>>>>>> bf6cd4ede20fecbb5e96adf805239d63d3d30464:src/main/java/com/ubbackend/model/StudentEntity.java
     }
 }
