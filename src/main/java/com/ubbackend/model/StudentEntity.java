@@ -42,10 +42,11 @@ public class StudentEntity {
     @JsonManagedReference
     private Set<GradeEntity> grades = new HashSet<>();
 
+
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -53,7 +54,6 @@ public class StudentEntity {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -61,7 +61,6 @@ public class StudentEntity {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -69,7 +68,6 @@ public class StudentEntity {
     public Long getDni() {
         return dni;
     }
-
     public void setDni(Long dni) {
         this.dni = dni;
     }
@@ -77,7 +75,6 @@ public class StudentEntity {
     public int getNumSemester() {
         return numSemester;
     }
-
     public void setNumSemester(int numSemester) {
         this.numSemester = numSemester;
     }
@@ -85,7 +82,6 @@ public class StudentEntity {
     public Float getAverage() {
         return average;
     }
-
     public void setAverage(Float average) {
         this.average = average;
     }

@@ -4,6 +4,8 @@ import com.ubbackend.DTOs.StudentDTO;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.StudentEntity;
 import com.ubbackend.services.StudentService;
+import com.ubbackend.servicesImpl.StudentServiceImpl;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
