@@ -50,11 +50,11 @@ public class UserServiceImpl implements UserService {
 
                     RolEntity rolEntity = new RolEntity();
 
-                    if(accessCodeEntity.getRoleType().toString().equals("SUPER_ADMIN")) {
+                    if(accessCodeEntity.getRoleType().toString().equals(ERol.SUPER_ADMIN.toString())) {
                         rolEntity.setRole(ERol.SUPER_ADMIN);
-                    } else if(accessCodeEntity.getRoleType().toString().equals("ADMIN")) {
+                    } else if(accessCodeEntity.getRoleType().toString().equals(ERol.ADMIN.toString())) {
                         rolEntity.setRole(ERol.ADMIN);
-                    } else if(accessCodeEntity.getRoleType().toString().equals("MODERATOR")) {
+                    } else if(accessCodeEntity.getRoleType().toString().equals(ERol.MODERATOR.toString())) {
                         rolEntity.setRole(ERol.MODERATOR);
                     }
 
