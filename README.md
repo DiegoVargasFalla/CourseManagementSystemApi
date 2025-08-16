@@ -1,1 +1,1 @@
-# CoureseManagementSystemWeb
+# CourseManagementSystemApi
