@@ -1,8 +1,6 @@
 package com.ubbackend.servicesImpl;
 
-import com.ubbackend.DTOs.CourseDTO;
-import com.ubbackend.DTOs.CourseUpdateDTO;
-import com.ubbackend.DTOs.NewStudentDTO;
+import com.ubbackend.DTOs.*;
 import com.ubbackend.Exceptions.NotFundCourseException;
 import com.ubbackend.Exceptions.ResourceNotCreatedException;
 import com.ubbackend.enumerations.EShift;
@@ -15,9 +13,11 @@ import com.ubbackend.services.CourseService;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -31,8 +31,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseEntity> getCourses() {
-        return courseRepository.findAll();
+    @Transactional
+    public List<CourseRecursionDTO> getCourses() {
+
+        List<CourseRecursionDTO> courseRecursionDTOList = new ArrayList<>();
+
+        for(CourseEntity courseEntity : courseRepository.findAll()) {
+            CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+            courseRecursionDTO.toCourseRecursionDTO(courseEntity);
+            courseRecursionDTOList.add(courseRecursionDTO);
+        }
+
+        return courseRecursionDTOList;
     }
 
     @Override

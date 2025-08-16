@@ -1,17 +1,11 @@
 package com.ubbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 @Entity
 @Table( name = "student")
 public class StudentEntity {
@@ -41,8 +35,6 @@ public class StudentEntity {
     @OneToMany(mappedBy = "studentEntity")
     @JsonManagedReference
     private Set<GradeEntity> grades = new HashSet<>();
-
-
 
     public Long getId() {
         return id;

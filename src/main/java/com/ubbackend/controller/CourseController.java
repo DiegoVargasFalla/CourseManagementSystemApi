@@ -1,6 +1,7 @@
 package com.ubbackend.controller;
 
 import com.ubbackend.DTOs.CourseDTO;
+import com.ubbackend.DTOs.CourseRecursionDTO;
 import com.ubbackend.DTOs.NewStudentDTO;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.repository.CourseRepository;
@@ -15,7 +16,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1")
 public class CourseController {
-
     public final CourseService courseService;
 
     public CourseController(CourseService courseService, CourseRepository courseRepository) {
@@ -23,7 +23,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseEntity>> getCourses() {
+    public ResponseEntity<List<CourseRecursionDTO>> getCourses() {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourses());
     }
 
@@ -57,7 +57,7 @@ public class CourseController {
     }
 
     @PostMapping("/course/add/student")
-    public ResponseEntity<CourseEntity> addStudent(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
+    public ResponseEntity<CourseEntity> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
 
         Optional<CourseEntity> courseExisting = courseService.newStudent(newStudentDTO);
 
