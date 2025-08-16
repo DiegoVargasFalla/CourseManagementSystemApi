@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface CourseService {
     List<CourseRecursionDTO> getCourses();
-    Optional<CourseEntity> getCourse(Long id);
+    Optional<CourseRecursionDTO> getCourse(Long id) throws Exception;
     boolean createCourse(CourseDTO courseDTO) throws Exception;
     void deleteCourse(Long id) throws Exception;
     void updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception;

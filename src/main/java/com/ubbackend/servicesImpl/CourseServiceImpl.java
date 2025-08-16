@@ -46,8 +46,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Optional<CourseEntity> getCourse(Long id) {
-        return courseRepository.findById(id);
+    public Optional<CourseRecursionDTO> getCourse(Long id) throws Exception {
+        CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+        Optional<CourseEntity> courseExisting = courseRepository.findById(id);
+
+        if(courseExisting.isEmpty()) {
+            throw new NotFundCourseException("Course not exist");
+        }
+        courseRecursionDTO.toCourseRecursionDTO(courseExisting.get());
+        return Optional.of(courseRecursionDTO);
     }
 
     @Override

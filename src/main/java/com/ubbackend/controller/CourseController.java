@@ -28,13 +28,11 @@ public class CourseController {
     }
 
     @GetMapping("/course/{id}")
-    public ResponseEntity<CourseEntity> getCourseById(@PathVariable Long id) {
-        if(courseService.getCourse(id).isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourse(id).get());
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<CourseRecursionDTO> getCourseById(@PathVariable Long id) throws Exception {
+        Optional<CourseRecursionDTO> courseRecursionDTO = courseService.getCourse(id);
+        return courseRecursionDTO
+                .map(recursionDTO -> ResponseEntity.status(HttpStatus.OK).body(recursionDTO)).
+                orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping("/course/create")
