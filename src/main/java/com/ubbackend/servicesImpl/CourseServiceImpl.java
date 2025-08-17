@@ -67,9 +67,9 @@ public class CourseServiceImpl implements CourseService {
         if(courseDTO.getShift().equals(EShift.MORNING.toString())) {
             courseEntity.setShift(EShift.MORNING);
         } else if(courseDTO.getShift().equals(EShift.AFTERNOON.toString())) {
-            courseEntity.setShift(EShift.MORNING);
+            courseEntity.setShift(EShift.AFTERNOON);
         } else if(courseDTO.getShift().equals(EShift.EVENING.toString())) {
-            courseEntity.setShift(EShift.MORNING);
+            courseEntity.setShift(EShift.EVENING);
         } else {
             throw new ResourceNotCreatedException("The course schedule is wrong");
         }

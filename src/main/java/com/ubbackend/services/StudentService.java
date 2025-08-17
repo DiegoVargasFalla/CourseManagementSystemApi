@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface StudentService {
     Optional<CourseRecursionDTO> createStudent(StudentDTO studentDTO) throws Exception;
-    //Optional<StudentEntity> getStudent(Long dni) throws Exception;
+    Optional<StudentEntity> getStudent(Long dni) throws Exception;
     List<StudentRecursionDTO> getStudents();
-    //boolean deleteStudent(Long dni) throws Exception;
-    //Optional<StudentEntity> updateStudent(StudentUpdateDTO studentUpdateDTO);
+    boolean deleteStudent(Long id) throws Exception;
+    Optional<StudentRecursionDTO> updateStudent(StudentUpdateDTO studentUpdateDTO) throws Exception;
 }

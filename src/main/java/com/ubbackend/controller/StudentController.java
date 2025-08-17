@@ -51,7 +51,10 @@ public class StudentController {
     }
 
     @PatchMapping("/update/student")
-    public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateDTO studentUpdateDTO) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
+        Optional<StudentRecursionDTO> studentRecursionExisting = studentService.updateStudent(studentUpdateDTO);
+        return studentRecursionExisting
+        .map(student -> ResponseEntity.status(HttpStatus.OK).body(student))
+        .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 }
