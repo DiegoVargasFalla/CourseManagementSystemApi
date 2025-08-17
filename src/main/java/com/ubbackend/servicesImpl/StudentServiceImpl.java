@@ -1,6 +1,8 @@
 package com.ubbackend.servicesImpl;
 
+import com.ubbackend.DTOs.CourseRecursionDTO;
 import com.ubbackend.DTOs.StudentDTO;
+import com.ubbackend.DTOs.StudentRecursionDTO;
 import com.ubbackend.DTOs.StudentUpdateDTO;
 import com.ubbackend.Exceptions.ResourceNotCreatedException;
 import com.ubbackend.model.CourseEntity;
@@ -9,9 +11,10 @@ import com.ubbackend.repository.CourseRepository;
 import com.ubbackend.repository.StudentRepository;
 import com.ubbackend.services.StudentService;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,7 +29,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<CourseEntity> createStudent(StudentDTO studentDTO) throws Exception{
+    @Transactional
+    public List<StudentRecursionDTO> getStudents() {
+
+        List<StudentRecursionDTO> studentRecursionDTOList = new ArrayList<>();
+
+        for(StudentEntity student : studentRepository.findAll()) {
+            StudentRecursionDTO studentRecursionDTO = new StudentRecursionDTO();
+            studentRecursionDTO.toStudentRecursionDTO(student);
+            studentRecursionDTOList.add(studentRecursionDTO);
+        }
+        return studentRecursionDTOList;
+    }
+
+    @Override
+    @Transactional
+    public Optional<CourseRecursionDTO> createStudent(StudentDTO studentDTO) throws Exception{
 
         Optional<CourseEntity> courseExisting = courseRepository.findById(studentDTO.getIdCourse());
 
@@ -44,7 +62,10 @@ public class StudentServiceImpl implements StudentService {
             }
 
             courseEntity.addStudent(studentEntity);
-            return Optional.of(courseRepository.save(courseEntity));
+            CourseEntity newCourseEntity = courseRepository.save(courseEntity);
+            CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+            courseRecursionDTO.toCourseRecursionDTO(newCourseEntity);
+            return Optional.of(courseRecursionDTO);
         } else {
             throw new ResourceNotCreatedException("Course not exist");
         }
@@ -53,11 +74,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<StudentEntity> getStudent(Long dni) throws Exception {
         return studentRepository.findByDni(dni);
-    }
-
-    @Override
-    public List<StudentEntity> getStudents() {
-        return studentRepository.findAll();
     }
 
     @Override
@@ -70,24 +86,31 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<StudentEntity> updateStudent(StudentUpdateDTO studentUpdateDTO) throws Exception{
-        try{
-            Optional<StudentEntity> student = studentRepository.findByDni(studentUpdateDTO.getDni());
+    public Optional<StudentRecursionDTO> updateStudent(StudentUpdateDTO studentUpdateDTO) throws Exception{
+        Optional<StudentEntity> studentExisting = studentRepository.findById(studentUpdateDTO.getId());
+        
+        if(studentExisting.isPresent()){
+            StudentEntity student = studentExisting.get();
+
             if(studentUpdateDTO.getName() != null){
-                student.get().setName(studentUpdateDTO.getName());
+                student.setName(studentUpdateDTO.getName());
             }
             if(studentUpdateDTO.getLastName() != null){
-                student.get().setLastName(studentUpdateDTO.getLastName());
+                student.setLastName(studentUpdateDTO.getLastName());
             }
-            if(studentUpdateDTO.getNumSemester() == 1 || studentUpdateDTO.getNumSemester() == 2){
-                student.get().setNumSemester(studentUpdateDTO.getNumSemester());
+            if(studentUpdateDTO.getNumSemester() != 0){
+                student.setNumSemester(studentUpdateDTO.getNumSemester());
             }
-            studentRepository.save(student.get());
+            if(studentUpdateDTO.getDni() != 0){
+                student.setDni(studentUpdateDTO.getDni());
+            }
 
-            return Optional.of(student).get();
+            StudentEntity studentEntity = studentRepository.save(student);
+            StudentRecursionDTO studentRecursionDTO = new StudentRecursionDTO();
+            studentRecursionDTO.toStudentRecursionDTO(studentEntity);
+
+            return Optional.of(studentRecursionDTO);
         }
-        catch (Exception e) {
-            throw new Exception("[You must include the student's dni] or [student not found]");
-        }
+        return Optional.empty();
     }
 }

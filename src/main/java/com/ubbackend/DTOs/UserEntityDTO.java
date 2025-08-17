@@ -1,17 +1,26 @@
 package com.ubbackend.DTOs;
 
 public class UserEntityDTO {
-    private String username;
+    private String name;
+    private String email;
     private String password;
     private Long dni;
     private Long accessCode;
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

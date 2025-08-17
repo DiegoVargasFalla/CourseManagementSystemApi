@@ -11,6 +11,7 @@ import com.ubbackend.repository.UserRepository;
 import com.ubbackend.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -30,27 +31,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean createUser(UserEntityDTO userEntityDTO) throws Exception {
 
-        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getUsername());
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getEmail());
 
         if(optionalUserEntity.isPresent()) {
             throw new UserExistException("User already exist");
         } else if(userEntityDTO.getAccessCode() != null) {
+
             Optional<AccessCodeEntity> accessCodeExisting = accessCodeRepository.findByCode(userEntityDTO.getAccessCode());
+
             if(accessCodeExisting.isPresent() ) {
+
                 AccessCodeEntity accessCodeEntity = accessCodeExisting.get();
 
                 if(accessCodeEntity.getActive()) {
+
                     accessCodeEntity.setActive(false);
 
                     RolEntity rolEntity = new RolEntity();
 
-                    if(accessCodeEntity.getRoleType().toString().equals("SUPER_ADMIN")) {
+                    if(accessCodeEntity.getRoleType().toString().equals(ERol.SUPER_ADMIN.toString())) {
                         rolEntity.setRole(ERol.SUPER_ADMIN);
-                    } else if(accessCodeEntity.getRoleType().toString().equals("ADMIN")) {
+                    } else if(accessCodeEntity.getRoleType().toString().equals(ERol.ADMIN.toString())) {
                         rolEntity.setRole(ERol.ADMIN);
-                    } else if(accessCodeEntity.getRoleType().toString().equals("MODERATOR")) {
+                    } else if(accessCodeEntity.getRoleType().toString().equals(ERol.MODERATOR.toString())) {
                         rolEntity.setRole(ERol.MODERATOR);
                     }
 
@@ -58,7 +64,7 @@ public class UserServiceImpl implements UserService {
                     roles.add(rolEntity);
 
                     UserEntity userEntity = new UserEntity();
-                    userEntity.setEmail(userEntityDTO.getUsername());
+                    userEntity.setEmail(userEntityDTO.getEmail());
                     userEntity.setPassword(passwordEncoder.encode(userEntityDTO.getPassword()));
                     userEntity.setDni(userEntityDTO.getDni());
                     userEntity.setRoles(roles);
