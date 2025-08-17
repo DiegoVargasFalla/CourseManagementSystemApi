@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "users ")
 public class UserEntity {
 
     @Id
@@ -16,7 +17,7 @@ public class UserEntity {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = RolEntity.class, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = RolEntity.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonManagedReference
     private Set<RolEntity> roles;

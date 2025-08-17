@@ -1,17 +1,11 @@
 package com.ubbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ubbackend.enumerations.EShift;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 @Entity
 @Table(name = "course")
 public class CourseEntity {
@@ -27,11 +21,11 @@ public class CourseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade ={ CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<StudentEntity> students;
+    private Set<StudentEntity> students;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "courseEntity")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "courseEntity")
     @JsonManagedReference
-    private List<GradeEntity> grades;
+    private Set<GradeEntity> grades;
 
     public void addStudent(StudentEntity studentEntity) {
         students.add(studentEntity);
@@ -70,23 +64,23 @@ public class CourseEntity {
         this.shift = turn;
     }
 
-    public List<StudentEntity> getStudents() {
+    public Set<StudentEntity> getStudents() {
         return students;
     }
 
-    public void setStudents(List<StudentEntity> listStudentEntity) {
+    public void setStudents(Set<StudentEntity> listStudentEntity) {
         this.students = listStudentEntity;
     }
 
-    public void setListStudent(List<StudentEntity> listStudentEntity) {
+    public void setListStudent(Set<StudentEntity> listStudentEntity) {
         this.students = listStudentEntity;
     }
 
-    public List<GradeEntity> getGrades() {
+    public Set<GradeEntity> getGrades() {
         return grades;
     }
 
-    public void setGrades(List<GradeEntity> notes) {
+    public void setGrades(Set<GradeEntity> notes) {
         this.grades = notes;
     }
 }

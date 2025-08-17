@@ -1,6 +1,7 @@
 package com.ubbackend.controller;
 
 import com.ubbackend.DTOs.CourseDTO;
+import com.ubbackend.DTOs.CourseRecursionDTO;
 import com.ubbackend.DTOs.NewStudentDTO;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.repository.CourseRepository;
@@ -15,7 +16,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1")
 public class CourseController {
-
     public final CourseService courseService;
 
     public CourseController(CourseService courseService, CourseRepository courseRepository) {
@@ -23,18 +23,16 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseEntity>> getCourses() {
+    public ResponseEntity<List<CourseRecursionDTO>> getCourses() {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourses());
     }
 
     @GetMapping("/course/{id}")
-    public ResponseEntity<CourseEntity> getCourseById(@PathVariable Long id) {
-        if(courseService.getCourse(id).isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourse(id).get());
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<CourseRecursionDTO> getCourseById(@PathVariable Long id) throws Exception {
+        Optional<CourseRecursionDTO> courseRecursionDTO = courseService.getCourse(id);
+        return courseRecursionDTO
+                .map(recursionDTO -> ResponseEntity.status(HttpStatus.OK).body(recursionDTO)).
+                orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping("/course/create")
@@ -57,12 +55,20 @@ public class CourseController {
     }
 
     @PostMapping("/course/add/student")
-    public ResponseEntity<CourseEntity> addStudent(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
-
+    public ResponseEntity<CourseEntity> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
         Optional<CourseEntity> courseExisting = courseService.newStudent(newStudentDTO);
 
         return courseExisting
                 .map(courseEntity -> ResponseEntity.status(HttpStatus.OK).body(courseEntity))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PostMapping("/course/student/delete")
+    public ResponseEntity<?> deleteStudentFromCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
+        if(courseService.deleteStudentFromCourse(newStudentDTO)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Student has been deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
