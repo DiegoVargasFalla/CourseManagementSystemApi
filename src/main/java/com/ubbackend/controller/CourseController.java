@@ -2,6 +2,7 @@ package com.ubbackend.controller;
 
 import com.ubbackend.DTOs.CourseDTO;
 import com.ubbackend.DTOs.CourseRecursionDTO;
+import com.ubbackend.DTOs.CourseUpdateDTO;
 import com.ubbackend.DTOs.NewStudentDTO;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.repository.CourseRepository;
@@ -45,13 +46,19 @@ public class CourseController {
     }
 
     @DeleteMapping("/course/{id}/delete")
-    public ResponseEntity<CourseEntity> deleteCourse(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> deleteCourse(@PathVariable Long id) throws Exception {
+        if(courseService.deleteCourse(id)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Course successfully deleted");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course not found");
     }
 
     @PatchMapping("/course/update")
-    public ResponseEntity<CourseEntity> updateCourse(@RequestBody CourseEntity courseEntity) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<CourseEntity> updateCourse(@RequestBody CourseUpdateDTO courseUpdateDTO) throws Exception {
+        Optional<CourseEntity> courseUpdateExisting = courseService.updateCourse(courseUpdateDTO);
+        return courseUpdateExisting
+                .map(courseEntity -> ResponseEntity.status(HttpStatus.OK).body(courseEntity))
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @PostMapping("/course/add/student")

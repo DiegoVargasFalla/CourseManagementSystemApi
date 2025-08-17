@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -84,15 +83,17 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
-    public void updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception{
+    public Optional<CourseEntity> updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception {
         Optional<CourseEntity> courseExisting = courseRepository.findById(courseUpdateDTO.getId());
         if(courseExisting.isPresent()) {
             CourseEntity courseEntity = courseExisting.get();
             if(courseUpdateDTO.getName() != null) {
                 courseEntity.setName(courseUpdateDTO.getName());
             }
-            courseRepository.save(courseEntity);
+            if (courseUpdateDTO.getShift() != null) {
+                courseEntity.setShift(courseUpdateDTO.getShift());
+            }
+            return Optional.of(courseRepository.save(courseEntity));
         } else {
             throw new NotFundCourseException("Course not found");
         }
@@ -100,11 +101,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void deleteCourse(Long id) throws Exception {
+    public boolean deleteCourse(Long id) throws Exception {
         if(!courseRepository.existsById(id)) {
-            throw new NotFundCourseException("Course not found");
+            return false;
         }
         courseRepository.deleteById(id);
+        return true;
     }
 
     @Override

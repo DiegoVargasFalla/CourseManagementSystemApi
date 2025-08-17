@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public boolean createUser(UserEntityDTO userEntityDTO) throws Exception {
 
-        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getUsername());
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getEmail());
 
         if(optionalUserEntity.isPresent()) {
             throw new UserExistException("User already exist");
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
                     roles.add(rolEntity);
 
                     UserEntity userEntity = new UserEntity();
-                    userEntity.setEmail(userEntityDTO.getUsername());
+                    userEntity.setEmail(userEntityDTO.getEmail());
                     userEntity.setPassword(passwordEncoder.encode(userEntityDTO.getPassword()));
                     userEntity.setDni(userEntityDTO.getDni());
                     userEntity.setRoles(roles);
