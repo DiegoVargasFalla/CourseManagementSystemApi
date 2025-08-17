@@ -32,7 +32,7 @@ public class StudentEntity {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "students")
     private Set<CourseEntity> courses = new HashSet<>();
 
-    @OneToMany(mappedBy = "studentEntity")
+    @OneToMany(mappedBy = "studentEntity", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonManagedReference
     private Set<GradeEntity> grades = new HashSet<>();
 

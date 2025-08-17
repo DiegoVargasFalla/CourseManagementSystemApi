@@ -46,6 +46,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public Optional<CourseRecursionDTO> getCourse(Long id) throws Exception {
         CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
         Optional<CourseEntity> courseExisting = courseRepository.findById(id);
@@ -58,6 +59,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public boolean createCourse(CourseDTO courseDTO) throws Exception {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setName(courseDTO.getName());
@@ -82,6 +84,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public void updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception{
         Optional<CourseEntity> courseExisting = courseRepository.findById(courseUpdateDTO.getId());
         if(courseExisting.isPresent()) {
@@ -96,6 +99,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public void deleteCourse(Long id) throws Exception {
         if(!courseRepository.existsById(id)) {
             throw new NotFundCourseException("Course not found");
@@ -104,6 +108,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public Optional<CourseEntity> newStudent(NewStudentDTO newStudentDTO) throws Exception {
 
         Optional<CourseEntity> courseExisting = courseRepository.findById(newStudentDTO.getCourseId());
@@ -119,5 +124,22 @@ public class CourseServiceImpl implements CourseService {
         } else {
             throw new ResourceNotCreatedException("Could not created resource");
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteStudentFromCourse(NewStudentDTO studentDTO) {
+
+        Optional<StudentEntity> studentExisting = studentRepository.findByDni(studentDTO.getDni());
+        Optional<CourseEntity> courseExisting = courseRepository.findById(studentDTO.getCourseId());
+        if(studentExisting.isPresent() && courseExisting.isPresent()) {
+            StudentEntity studentEntity = studentExisting.get();
+            CourseEntity courseEntity = courseExisting.get();
+
+            courseEntity.getStudents().remove(studentEntity);
+            courseRepository.save(courseEntity);
+            return true;
+        }
+        throw new IllegalArgumentException("Course or student not found");
     }
 }

@@ -43,6 +43,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public Optional<CourseRecursionDTO> createStudent(StudentDTO studentDTO) throws Exception{
 
         Optional<CourseEntity> courseExisting = courseRepository.findById(studentDTO.getIdCourse());

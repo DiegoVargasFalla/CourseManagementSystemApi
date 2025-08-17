@@ -11,6 +11,7 @@ import com.ubbackend.repository.UserRepository;
 import com.ubbackend.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean createUser(UserEntityDTO userEntityDTO) throws Exception {
 
         Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getUsername());

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     Optional<StudentEntity> findByDni(Long dni);
+    boolean existsByDni(Long dni);
+    void deleteByDni(Long dni);
 }

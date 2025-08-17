@@ -16,4 +16,5 @@ public interface CourseService {
     void deleteCourse(Long id) throws Exception;
     void updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception;
     Optional<CourseEntity> newStudent(NewStudentDTO newStudentDTO) throws Exception;
+    boolean deleteStudentFromCourse(NewStudentDTO studentDTO);
 }

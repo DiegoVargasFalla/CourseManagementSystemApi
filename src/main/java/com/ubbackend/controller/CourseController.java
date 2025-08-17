@@ -56,11 +56,19 @@ public class CourseController {
 
     @PostMapping("/course/add/student")
     public ResponseEntity<CourseEntity> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
-
         Optional<CourseEntity> courseExisting = courseService.newStudent(newStudentDTO);
 
         return courseExisting
                 .map(courseEntity -> ResponseEntity.status(HttpStatus.OK).body(courseEntity))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PostMapping("/course/student/delete")
+    public ResponseEntity<?> deleteStudentFromCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
+        if(courseService.deleteStudentFromCourse(newStudentDTO)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Student has been deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

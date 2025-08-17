@@ -4,7 +4,7 @@ import com.ubbackend.enumerations.ERol;
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table(name = "roles")
 public class RolEntity {
 
     @Id
