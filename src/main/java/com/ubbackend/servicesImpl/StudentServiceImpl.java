@@ -1,6 +1,7 @@
 package com.ubbackend.servicesImpl;
 
 import com.ubbackend.DTOs.StudentDTO;
+import com.ubbackend.DTOs.StudentUpdateDTO;
 import com.ubbackend.Exceptions.ResourceNotCreatedException;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.StudentEntity;
@@ -50,7 +51,43 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Optional<StudentEntity> getStudent(Long dni) throws Exception {
+        return studentRepository.findByDni(dni);
+    }
+
+    @Override
     public List<StudentEntity> getStudents() {
         return studentRepository.findAll();
+    }
+
+    @Override
+    public boolean deleteStudent(Long id) throws Exception {
+        if(!studentRepository.existsById(id)){
+            throw new Exception("Student not found!");
+        }
+        studentRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public Optional<StudentEntity> updateStudent(StudentUpdateDTO studentUpdateDTO) throws Exception{
+        try{
+            Optional<StudentEntity> student = studentRepository.findByDni(studentUpdateDTO.getDni());
+            if(studentUpdateDTO.getName() != null){
+                student.get().setName(studentUpdateDTO.getName());
+            }
+            if(studentUpdateDTO.getLastName() != null){
+                student.get().setLastName(studentUpdateDTO.getLastName());
+            }
+            if(studentUpdateDTO.getNumSemester() == 1 || studentUpdateDTO.getNumSemester() == 2){
+                student.get().setNumSemester(studentUpdateDTO.getNumSemester());
+            }
+            studentRepository.save(student.get());
+
+            return Optional.of(student).get();
+        }
+        catch (Exception e) {
+            throw new Exception("[You must include the student's dni] or [student not found]");
+        }
     }
 }
