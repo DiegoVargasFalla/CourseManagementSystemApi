@@ -90,6 +90,7 @@ public class CourseRecursionDTO {
         studentRecursionDTO.setId(studentEntity.getId());
         studentRecursionDTO.setName(studentEntity.getName());
         studentRecursionDTO.setLastName(studentEntity.getLastName());
+        studentRecursionDTO.setEmail(studentEntity.getEmail());
         studentRecursionDTO.setDni(studentEntity.getDni());
         studentRecursionDTO.setNumSemester(studentEntity.getNumSemester());
         studentRecursionDTO.setAverage(studentEntity.getAverage());

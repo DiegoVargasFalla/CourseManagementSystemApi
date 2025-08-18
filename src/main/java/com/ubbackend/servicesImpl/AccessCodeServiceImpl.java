@@ -52,8 +52,6 @@ public class AccessCodeServiceImpl implements AccessCodeService {
                 accessCodeEntity.setRoleType(ERol.SUPER_ADMIN);
             } else if (accessCodeCreatedDTO.getRolType().equals(ERol.ADMIN.toString())) {
                 accessCodeEntity.setRoleType(ERol.ADMIN);
-            } else if (accessCodeCreatedDTO.getRolType().equals(ERol.MODERATOR.toString())) {
-                accessCodeEntity.setRoleType(ERol.MODERATOR);
             }
 
             accessCodeRepository.save(accessCodeEntity);

@@ -15,6 +15,8 @@ public class StudentRecursionDTO {
 
     private String lastName;
 
+    private String email;
+
     private Long dni;
 
     private int numSemester = 1;
@@ -42,6 +44,14 @@ public class StudentRecursionDTO {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setLastName(String lastName) {
@@ -87,13 +97,6 @@ public class StudentRecursionDTO {
         this.dni = studentEntity.getDni();
         this.numSemester = studentEntity.getNumSemester();
         this.average = studentEntity.getAverage();
-
-//        for(GradeEntity gradeEntity: studentEntity.getGrades()) {
-//            GradeRecursionDTO gradeRecursionDTO = new GradeRecursionDTO();
-//            gradeRecursionDTO.setId(gradeEntity.getId());
-//            gradeRecursionDTO.setGrade(gradeEntity.getGrade());
-//            this.grades.add(gradeRecursionDTO);
-//        }
 
         for(CourseEntity courseEntity : studentEntity.getCourses()) {
             CourseSimpleRecursionDTO csrDTO = new CourseSimpleRecursionDTO();

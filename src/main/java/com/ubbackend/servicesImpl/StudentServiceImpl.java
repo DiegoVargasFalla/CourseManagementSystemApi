@@ -68,6 +68,7 @@ public class StudentServiceImpl implements StudentService {
             StudentEntity studentEntity = new StudentEntity();
             studentEntity.setName(studentDTO.getName());
             studentEntity.setLastName(studentDTO.getLastName());
+            studentEntity.setEmail(studentDTO.getEmail());
 
             if(studentRepository.findByDni(studentDTO.getDni()).isEmpty()) {
                 studentEntity.setDni(studentDTO.getDni());
@@ -105,6 +106,9 @@ public class StudentServiceImpl implements StudentService {
                 student.setName(studentUpdateDTO.getName());
             }
             if(studentUpdateDTO.getLastName() != null){
+                student.setLastName(studentUpdateDTO.getLastName());
+            }
+            if(studentUpdateDTO.getEmail() != null){
                 student.setLastName(studentUpdateDTO.getLastName());
             }
             if(studentUpdateDTO.getNumSemester() != 0){

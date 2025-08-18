@@ -1,6 +1,8 @@
 package com.ubbackend.servicesImpl;
 
 import com.ubbackend.DTO.UserEntityDTO;
+import com.ubbackend.DTO.UserResponseDTO;
+import com.ubbackend.DTO.UserUpdateDTO;
 import com.ubbackend.exception.UserExistException;
 import com.ubbackend.enumeration.ERol;
 import com.ubbackend.model.AccessCodeEntity;
@@ -13,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,6 +28,41 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.accessCodeRepository = accessCodeRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<UserResponseDTO> getUsers() {
+
+        List<UserEntity> usersResponseDTO = userRepository.findAll();
+        List<UserResponseDTO> userResponseDTOList = new ArrayList<>();
+
+        for(UserEntity user : usersResponseDTO) {
+
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setName(user.getName());
+            userResponseDTO.setEmail(user.getEmail());
+            userResponseDTO.setDni(user.getDni());
+            userResponseDTOList.add(userResponseDTO);
+        }
+        return userResponseDTOList;
+    }
+
+    @Override
+    public Optional<UserResponseDTO> getUser(String email) throws Exception {
+        Optional<UserEntity> userExisting = userRepository.findByEmail(email);
+
+        if(userExisting.isPresent()) {
+            UserEntity user = userExisting.get();
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setName(user.getName());
+            userResponseDTO.setEmail(user.getEmail());
+            userResponseDTO.setDni(user.getDni());
+            return Optional.of(userResponseDTO);
+        }
+        throw new UserExistException("User does´t exist");
     }
 
     @Override
@@ -56,8 +91,6 @@ public class UserServiceImpl implements UserService {
                         rolEntity.setRole(ERol.SUPER_ADMIN);
                     } else if(accessCodeEntity.getRoleType().toString().equals(ERol.ADMIN.toString())) {
                         rolEntity.setRole(ERol.ADMIN);
-                    } else if(accessCodeEntity.getRoleType().toString().equals(ERol.MODERATOR.toString())) {
-                        rolEntity.setRole(ERol.MODERATOR);
                     }
 
                     Set<RolEntity> roles = new HashSet<>();
@@ -80,5 +113,45 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Optional<UserResponseDTO> updateUser(Long id, UserUpdateDTO userUpdateDTO) throws Exception {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
+
+        if(optionalUserEntity.isPresent()) {
+            UserEntity userEntity = optionalUserEntity.get();
+
+            if(userUpdateDTO.getName() != null) {
+                userEntity.setName(userUpdateDTO.getName());
+            }
+            if(userUpdateDTO.getEmail() != null) {
+                userEntity.setEmail(userUpdateDTO.getEmail());
+            }
+            if(userUpdateDTO.getDni() != null) {
+                userEntity.setDni(userUpdateDTO.getDni());
+            }
+
+            UserEntity userUpdate = userRepository.save(userEntity);
+
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(userUpdate.getId());
+            userResponseDTO.setName(userUpdate.getName());
+            userResponseDTO.setEmail(userUpdate.getEmail());
+            userResponseDTO.setDni(userUpdate.getDni());
+
+            return Optional.of(userResponseDTO);
+        }
+        throw new UserExistException("User does not exist");
+    }
+
+    @Override
+    public boolean deleteUser(Long id) throws Exception {
+
+        if(userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

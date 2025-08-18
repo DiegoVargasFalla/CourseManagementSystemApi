@@ -8,6 +8,8 @@ public class StudentDTO {
 
     private String lastName;
 
+    private String email;
+
     private Long dni;
 
     public Long getIdCourse() {
@@ -32,6 +34,14 @@ public class StudentDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getDni() {

@@ -7,12 +7,12 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "users ")
+@Table(name = "users")
 public class UserEntity {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
     private String email;
     private String password;
@@ -27,7 +27,7 @@ public class UserEntity {
     @JsonBackReference
     private Set<AccessCodeEntity> accessCodeEntityList;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -55,7 +55,7 @@ public class UserEntity {
         this.roles = roles;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

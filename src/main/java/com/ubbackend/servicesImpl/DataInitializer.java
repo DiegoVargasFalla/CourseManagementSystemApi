@@ -27,15 +27,19 @@ public class DataInitializer implements CommandLineRunner {
         if(userRepository.count() == 0) {
             UserEntity superAdmin = new UserEntity();
 
+            superAdmin.setName("superAdmin");
             superAdmin.setEmail("superadmin@gmail.com");
             superAdmin.setDni(123456789L);
             superAdmin.setPassword(passwordEncoder.encode("123456"));
 
             RolEntity role = new RolEntity();
             role.setRole(ERol.SUPER_ADMIN);
+
             Set<RolEntity> roles = new HashSet<>();
             roles.add(role);
+
             superAdmin.setRoles(roles);
+
             userRepository.save(superAdmin);
         }
     }

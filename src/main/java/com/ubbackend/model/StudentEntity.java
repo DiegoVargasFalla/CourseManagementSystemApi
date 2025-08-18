@@ -1,7 +1,6 @@
 package com.ubbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -20,6 +19,9 @@ public class StudentEntity {
 
     @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private Long dni;
@@ -56,6 +58,13 @@ public class StudentEntity {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getDni() {
