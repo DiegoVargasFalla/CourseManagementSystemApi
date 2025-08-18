@@ -1,7 +1,5 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
 public class AccessCodeResponseDTO {
     private String accessCode;
-
-
 }

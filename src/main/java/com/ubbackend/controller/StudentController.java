@@ -1,11 +1,6 @@
 package com.ubbackend.controller;
 
-import com.ubbackend.DTOs.CourseRecursionDTO;
-import com.ubbackend.DTOs.StudentDTO;
-import com.ubbackend.DTOs.StudentRecursionDTO;
-import com.ubbackend.DTOs.StudentUpdateDTO;
-import com.ubbackend.model.CourseEntity;
-import com.ubbackend.model.StudentEntity;
+import com.ubbackend.DTO.*;
 import com.ubbackend.services.StudentService;
 
 import org.springframework.http.HttpStatus;
@@ -27,34 +22,49 @@ public class StudentController {
 
     @GetMapping("/students")
     public ResponseEntity<List<StudentRecursionDTO>> getStudents() {
+        System.out.println("-> at students ##### ");
         return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
     }
 
-    @GetMapping("/student/{id}")
-    public ResponseEntity<StudentEntity> getStudent(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new StudentEntity());
+    @GetMapping("/students/{id}")
+    public ResponseEntity<StudentRecursionDTO> getStudent(@PathVariable Long id) throws Exception {
+        System.out.println("-> at student ##### ");
+        Optional<StudentRecursionDTO> studentRecursionExisting = studentService.getStudent(id);
+        return studentRecursionExisting
+                .map(studentRecursionDTO -> ResponseEntity.status(HttpStatus.OK).body(studentRecursionDTO))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.OK).build());
     }
 
-    @PostMapping("/create/student")
-    public ResponseEntity<?> createStudent(@RequestBody StudentDTO studentDTO) throws Exception {
+    @PostMapping("/students")
+    public ResponseEntity<CourseRecursionDTO> createStudent(@RequestBody StudentDTO studentDTO) throws Exception {
         Optional<CourseRecursionDTO> courseExisting = studentService.createStudent(studentDTO);
-        if(courseExisting.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(courseExisting.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Student create failed");
+        return courseExisting
+                .map(courseRecursionDTO -> ResponseEntity.status(HttpStatus.CREATED).body(courseRecursionDTO))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<String> deleteStudent(@PathVariable Long id) throws Exception {
+        if(!studentService.deleteStudent(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully");
     }
 
-    @DeleteMapping("/delete/student/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PatchMapping("/update/student")
-    public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
-        Optional<StudentRecursionDTO> studentRecursionExisting = studentService.updateStudent(studentUpdateDTO);
+    @PatchMapping("/students/{id}")
+    public ResponseEntity<StudentRecursionDTO> updateStudent(@PathVariable Long id, @RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
+        Optional<StudentRecursionDTO> studentRecursionExisting = studentService.updateStudent(id, studentUpdateDTO);
         return studentRecursionExisting
         .map(student -> ResponseEntity.status(HttpStatus.OK).body(student))
         .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @PostMapping("students/notes")
+    public ResponseEntity<StudentRecursionDTO> addGradeToStudent(@RequestBody StudentGradeDTO studentGradeDTO) throws Exception {
+
+        Optional<StudentRecursionDTO> studentRecursionDTO = studentService.addGradeToStudent(studentGradeDTO);
+        return studentRecursionDTO
+                .map(recursionDTO -> ResponseEntity.status(HttpStatus.OK).body(recursionDTO))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

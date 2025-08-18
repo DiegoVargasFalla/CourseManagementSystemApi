@@ -1,9 +1,9 @@
 package com.ubbackend.services;
 
-import com.ubbackend.DTOs.CourseDTO;
-import com.ubbackend.DTOs.CourseRecursionDTO;
-import com.ubbackend.DTOs.CourseUpdateDTO;
-import com.ubbackend.DTOs.NewStudentDTO;
+import com.ubbackend.DTO.CourseDTO;
+import com.ubbackend.DTO.CourseRecursionDTO;
+import com.ubbackend.DTO.CourseUpdateDTO;
+import com.ubbackend.DTO.NewStudentDTO;
 import com.ubbackend.model.CourseEntity;
 
 import java.util.List;

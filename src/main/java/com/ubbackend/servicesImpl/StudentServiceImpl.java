@@ -1,13 +1,13 @@
 package com.ubbackend.servicesImpl;
 
-import com.ubbackend.DTOs.CourseRecursionDTO;
-import com.ubbackend.DTOs.StudentDTO;
-import com.ubbackend.DTOs.StudentRecursionDTO;
-import com.ubbackend.DTOs.StudentUpdateDTO;
-import com.ubbackend.Exceptions.ResourceNotCreatedException;
+import com.ubbackend.DTO.*;
+import com.ubbackend.exception.ResourceNotCreatedException;
+import com.ubbackend.exception.UserExistException;
 import com.ubbackend.model.CourseEntity;
+import com.ubbackend.model.GradeEntity;
 import com.ubbackend.model.StudentEntity;
 import com.ubbackend.repository.CourseRepository;
+import com.ubbackend.repository.GradeRepository;
 import com.ubbackend.repository.StudentRepository;
 import com.ubbackend.services.StudentService;
 
@@ -22,10 +22,12 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final GradeRepository gradeRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository, CourseRepository courseRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, CourseRepository courseRepository, GradeRepository gradeRepository) {
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
+        this.gradeRepository = gradeRepository;
     }
 
     @Override
@@ -34,12 +36,24 @@ public class StudentServiceImpl implements StudentService {
 
         List<StudentRecursionDTO> studentRecursionDTOList = new ArrayList<>();
 
-        for(StudentEntity student : studentRepository.findAll()) {
+        for(StudentEntity student: studentRepository.findAll()) {
             StudentRecursionDTO studentRecursionDTO = new StudentRecursionDTO();
+
             studentRecursionDTO.toStudentRecursionDTO(student);
             studentRecursionDTOList.add(studentRecursionDTO);
         }
         return studentRecursionDTOList;
+    }
+
+    @Override
+    public Optional<StudentRecursionDTO> getStudent(Long id) throws Exception {
+        Optional<StudentEntity> studentExisting = studentRepository.findById(id);
+        if(studentExisting.isEmpty()) {
+            throw new UserExistException("Student not found");
+        }
+        StudentRecursionDTO studentRecursionDTO = new StudentRecursionDTO();
+        studentRecursionDTO.toStudentRecursionDTO(studentExisting.get());
+        return Optional.of(studentRecursionDTO);
     }
 
     @Override
@@ -72,11 +86,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<StudentEntity> getStudent(Long dni) throws Exception {
-        return studentRepository.findByDni(dni);
-    }
-
-    @Override
     public boolean deleteStudent(Long id) throws Exception {
         if(!studentRepository.existsById(id)){
             throw new Exception("Student not found!");
@@ -86,8 +95,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<StudentRecursionDTO> updateStudent(StudentUpdateDTO studentUpdateDTO) throws Exception{
-        Optional<StudentEntity> studentExisting = studentRepository.findById(studentUpdateDTO.getId());
+    public Optional<StudentRecursionDTO> updateStudent(Long id, StudentUpdateDTO studentUpdateDTO) throws Exception{
+        Optional<StudentEntity> studentExisting = studentRepository.findById(id);
         
         if(studentExisting.isPresent()){
             StudentEntity student = studentExisting.get();
@@ -110,6 +119,31 @@ public class StudentServiceImpl implements StudentService {
             studentRecursionDTO.toStudentRecursionDTO(studentEntity);
 
             return Optional.of(studentRecursionDTO);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<StudentRecursionDTO> addGradeToStudent(StudentGradeDTO studentGradeDTO) throws Exception {
+        Optional<StudentEntity> studentExisting = studentRepository.findById(studentGradeDTO.getStudentId());
+        Optional<CourseEntity> courseExisting = courseRepository.findById(studentGradeDTO.getCourseId());
+
+        if(studentExisting.isPresent() && courseExisting.isPresent()) {
+
+            StudentEntity studentEntity = studentExisting.get();
+            CourseEntity courseEntity = courseExisting.get();
+            GradeEntity gradeEntity = new GradeEntity();
+
+            gradeEntity.setGrade(studentGradeDTO.getGrade());
+            gradeEntity.setStudent(studentEntity);
+            gradeEntity.setCourse(courseEntity);
+
+            gradeRepository.save(gradeEntity);
+
+            StudentRecursionDTO studentRecursionDTO = new StudentRecursionDTO();
+            studentRecursionDTO.toStudentRecursionDTO(studentEntity);
+            return Optional.of(studentRecursionDTO);
+
         }
         return Optional.empty();
     }

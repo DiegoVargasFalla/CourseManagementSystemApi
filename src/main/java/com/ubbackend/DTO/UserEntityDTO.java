@@ -1,4 +1,4 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
 public class UserEntityDTO {
     private String name;

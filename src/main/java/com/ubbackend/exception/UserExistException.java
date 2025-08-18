@@ -1,4 +1,4 @@
-package com.ubbackend.Exceptions;
+package com.ubbackend.exception;
 
 public class UserExistException extends Exception {
     public UserExistException(String message) {

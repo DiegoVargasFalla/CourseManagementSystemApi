@@ -1,5 +1,6 @@
 package com.ubbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -33,7 +34,7 @@ public class StudentEntity {
     private Set<CourseEntity> courses = new HashSet<>();
 
     @OneToMany(mappedBy = "studentEntity", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<GradeEntity> grades = new HashSet<>();
 
     public Long getId() {

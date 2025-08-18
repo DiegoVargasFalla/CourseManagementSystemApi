@@ -1,6 +1,7 @@
 package com.ubbackend.model;
 
-import com.ubbackend.enumerations.ERol;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ubbackend.enumeration.ERol;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class AccessCodeEntity {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "creator_id")
+    @JsonManagedReference
     private UserEntity creator;
 
     @Enumerated(EnumType.STRING)

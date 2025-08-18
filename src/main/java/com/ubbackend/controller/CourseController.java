@@ -1,9 +1,9 @@
 package com.ubbackend.controller;
 
-import com.ubbackend.DTOs.CourseDTO;
-import com.ubbackend.DTOs.CourseRecursionDTO;
-import com.ubbackend.DTOs.CourseUpdateDTO;
-import com.ubbackend.DTOs.NewStudentDTO;
+import com.ubbackend.DTO.CourseDTO;
+import com.ubbackend.DTO.CourseRecursionDTO;
+import com.ubbackend.DTO.CourseUpdateDTO;
+import com.ubbackend.DTO.NewStudentDTO;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.repository.CourseRepository;
 import com.ubbackend.services.CourseService;
@@ -28,7 +28,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourses());
     }
 
-    @GetMapping("/course/{id}")
+    @GetMapping("/courses/{id}")
     public ResponseEntity<CourseRecursionDTO> getCourseById(@PathVariable Long id) throws Exception {
         Optional<CourseRecursionDTO> courseRecursionDTO = courseService.getCourse(id);
         return courseRecursionDTO
@@ -36,7 +36,7 @@ public class CourseController {
                 orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/course/create")
+    @PostMapping("/courses")
     public ResponseEntity<CourseEntity> createCourse(@RequestBody CourseDTO courseDTO) throws Exception {
         if(courseService.createCourse(courseDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -45,7 +45,7 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping("/course/{id}/delete")
+    @DeleteMapping("/courses/{id}")
     public ResponseEntity<?> deleteCourse(@PathVariable Long id) throws Exception {
         if(courseService.deleteCourse(id)) {
             return ResponseEntity.status(HttpStatus.OK).body("Course successfully deleted");
@@ -53,15 +53,19 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Course not found");
     }
 
-    @PatchMapping("/course/update")
-    public ResponseEntity<CourseEntity> updateCourse(@RequestBody CourseUpdateDTO courseUpdateDTO) throws Exception {
+    @PatchMapping("/courses")
+    public ResponseEntity<CourseRecursionDTO> updateCourse(@RequestBody CourseUpdateDTO courseUpdateDTO) throws Exception {
         Optional<CourseEntity> courseUpdateExisting = courseService.updateCourse(courseUpdateDTO);
-        return courseUpdateExisting
-                .map(courseEntity -> ResponseEntity.status(HttpStatus.OK).body(courseEntity))
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
+        if(courseUpdateExisting.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+        courseRecursionDTO.setId(courseUpdateExisting.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(courseRecursionDTO);
     }
 
-    @PostMapping("/course/add/student")
+    @PostMapping("/courses/students")
     public ResponseEntity<CourseEntity> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
         Optional<CourseEntity> courseExisting = courseService.newStudent(newStudentDTO);
 
@@ -70,8 +74,12 @@ public class CourseController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/course/student/delete")
-    public ResponseEntity<?> deleteStudentFromCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
+    @DeleteMapping("/courses/{courseId}/students/{studentDni}")
+    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable Long courseId, @PathVariable Long studentDni) throws Exception {
+        NewStudentDTO newStudentDTO = new NewStudentDTO();
+        newStudentDTO.setCourseId(courseId);
+        newStudentDTO.setDni(studentDni);
+
         if(courseService.deleteStudentFromCourse(newStudentDTO)) {
             return ResponseEntity.status(HttpStatus.OK).body("Student has been deleted");
         } else {

@@ -1,6 +1,6 @@
 package com.ubbackend.servicesImpl;
 
-import com.ubbackend.enumerations.ERol;
+import com.ubbackend.enumeration.ERol;
 import com.ubbackend.model.RolEntity;
 import com.ubbackend.model.UserEntity;
 import com.ubbackend.repository.UserRepository;

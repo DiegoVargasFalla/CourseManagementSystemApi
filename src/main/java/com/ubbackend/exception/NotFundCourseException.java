@@ -1,4 +1,4 @@
-package com.ubbackend.Exceptions;
+package com.ubbackend.exception;
 
 public class NotFundCourseException extends Exception{
     public NotFundCourseException(String message){

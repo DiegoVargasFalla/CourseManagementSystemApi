@@ -1,8 +1,8 @@
 package com.ubbackend.servicesImpl;
 
-import com.ubbackend.DTOs.UserEntityDTO;
-import com.ubbackend.Exceptions.UserExistException;
-import com.ubbackend.enumerations.ERol;
+import com.ubbackend.DTO.UserEntityDTO;
+import com.ubbackend.exception.UserExistException;
+import com.ubbackend.enumeration.ERol;
 import com.ubbackend.model.AccessCodeEntity;
 import com.ubbackend.model.RolEntity;
 import com.ubbackend.model.UserEntity;
@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
                     roles.add(rolEntity);
 
                     UserEntity userEntity = new UserEntity();
+                    userEntity.setName(userEntityDTO.getName());
                     userEntity.setEmail(userEntityDTO.getEmail());
                     userEntity.setPassword(passwordEncoder.encode(userEntityDTO.getPassword()));
                     userEntity.setDni(userEntityDTO.getDni());

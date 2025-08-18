@@ -1,7 +1,7 @@
 package com.ubbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ubbackend.enumerations.EShift;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ubbackend.enumeration.EShift;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -24,7 +24,7 @@ public class CourseEntity {
     private Set<StudentEntity> students;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "courseEntity")
-    @JsonManagedReference
+    @JsonBackReference
     private Set<GradeEntity> grades;
 
     public void addStudent(StudentEntity studentEntity) {

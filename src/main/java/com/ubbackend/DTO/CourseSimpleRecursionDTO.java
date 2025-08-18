@@ -1,8 +1,5 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
-import com.ubbackend.model.GradeEntity;
-
-import java.util.HashSet;
 import java.util.Set;
 
 public class CourseSimpleRecursionDTO {
@@ -13,7 +10,7 @@ public class CourseSimpleRecursionDTO {
 
     private float average;
 
-    private Set<GradeEntity> grades = new HashSet<>();
+    private Set<GradeRecursionDTO> grades;
 
     public Long getId() {
         return id;
@@ -39,11 +36,11 @@ public class CourseSimpleRecursionDTO {
         this.average = average;
     }
 
-    public Set<GradeEntity> getGrades() {
+    public Set<GradeRecursionDTO> getGrades() {
         return grades;
     }
 
-    public void setGrades(Set<GradeEntity> grades) {
+    public void setGrades(Set<GradeRecursionDTO> grades) {
         this.grades = grades;
     }
 }

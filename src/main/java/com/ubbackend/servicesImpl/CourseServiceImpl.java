@@ -1,9 +1,9 @@
 package com.ubbackend.servicesImpl;
 
-import com.ubbackend.DTOs.*;
-import com.ubbackend.Exceptions.NotFundCourseException;
-import com.ubbackend.Exceptions.ResourceNotCreatedException;
-import com.ubbackend.enumerations.EShift;
+import com.ubbackend.DTO.*;
+import com.ubbackend.exception.NotFundCourseException;
+import com.ubbackend.exception.ResourceNotCreatedException;
+import com.ubbackend.enumeration.EShift;
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.StudentEntity;
 import com.ubbackend.repository.CourseRepository;

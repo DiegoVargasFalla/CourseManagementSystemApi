@@ -1,6 +1,6 @@
 package com.ubbackend.model;
 
-import com.ubbackend.enumerations.ERol;
+import com.ubbackend.enumeration.ERol;
 import jakarta.persistence.*;
 
 @Entity

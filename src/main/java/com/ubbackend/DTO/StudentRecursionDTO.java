@@ -1,4 +1,4 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
 import com.ubbackend.model.CourseEntity;
 import com.ubbackend.model.GradeEntity;
@@ -22,8 +22,6 @@ public class StudentRecursionDTO {
     private Float average = 0.0F;
 
     private Set<CourseSimpleRecursionDTO> courses = new HashSet<>();
-
-    private Set<GradeEntity> grades = new HashSet<>();
 
 
     public Long getId() {
@@ -74,14 +72,6 @@ public class StudentRecursionDTO {
         this.average = average;
     }
 
-    public Set<GradeEntity> getGrades() {
-        return grades;
-    }
-
-    public void setGrades(Set<GradeEntity> grades) {
-        this.grades = grades;
-    }
-
     public Set<CourseSimpleRecursionDTO> getCourses() {
         return courses;
     }
@@ -97,16 +87,35 @@ public class StudentRecursionDTO {
         this.dni = studentEntity.getDni();
         this.numSemester = studentEntity.getNumSemester();
         this.average = studentEntity.getAverage();
-        this.grades = studentEntity.getGrades();
+
+//        for(GradeEntity gradeEntity: studentEntity.getGrades()) {
+//            GradeRecursionDTO gradeRecursionDTO = new GradeRecursionDTO();
+//            gradeRecursionDTO.setId(gradeEntity.getId());
+//            gradeRecursionDTO.setGrade(gradeEntity.getGrade());
+//            this.grades.add(gradeRecursionDTO);
+//        }
 
         for(CourseEntity courseEntity : studentEntity.getCourses()) {
             CourseSimpleRecursionDTO csrDTO = new CourseSimpleRecursionDTO();
             csrDTO.setId(courseEntity.getId());
             csrDTO.setName(courseEntity.getName());
             csrDTO.setAverage(courseEntity.getAverage());
-            csrDTO.setGrades(courseEntity.getGrades());
+            csrDTO.setGrades(getGradesFromCourse(courseEntity.getGrades(), studentEntity, courseEntity));
             courses.add(csrDTO);
         }
+    }
+
+    public static Set<GradeRecursionDTO> getGradesFromCourse(Set<GradeEntity> gradeEntities, StudentEntity studentEntity, CourseEntity courseEntity) {
+        Set<GradeRecursionDTO> gradesRecursionDTO = new HashSet<>();
+        for(GradeEntity gradeEntity: gradeEntities) {
+            if(gradeEntity.getStudent().getId().equals(studentEntity.getId()) && gradeEntity.getCourse().getId().equals(courseEntity.getId())) {
+                GradeRecursionDTO gradeRecursionDTO = new GradeRecursionDTO();
+                gradeRecursionDTO.setId(gradeEntity.getId());
+                gradeRecursionDTO.setGrade(gradeEntity.getGrade());
+                gradesRecursionDTO.add(gradeRecursionDTO);
+            }
+        }
+        return gradesRecursionDTO;
     }
 
 }

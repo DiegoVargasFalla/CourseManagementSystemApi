@@ -1,5 +1,6 @@
 package com.ubbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -23,6 +24,7 @@ public class UserEntity {
     private Set<RolEntity> roles;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "creator")
+    @JsonBackReference
     private Set<AccessCodeEntity> accessCodeEntityList;
 
     public int getId() {
@@ -31,6 +33,14 @@ public class UserEntity {
 
     public Long getDni() {
         return dni;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setDni(Long dni) {

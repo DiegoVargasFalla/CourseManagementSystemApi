@@ -1,14 +1,10 @@
 package com.ubbackend.controller;
 
-import com.ubbackend.DTOs.CreateAccessCodeDTO;
-import com.ubbackend.DTOs.UserEntityDTO;
-import com.ubbackend.services.AccessCodeService;
+import com.ubbackend.DTO.UserEntityDTO;
 import com.ubbackend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
@@ -19,6 +15,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    // ### IMPORTANT ##
+    // create delete, update, getAll and one methods
 
     @PostMapping("/create/user")
     public ResponseEntity<?> createUser(@RequestBody UserEntityDTO userEntityDTO) throws Exception {

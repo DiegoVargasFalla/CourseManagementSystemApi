@@ -1,6 +1,6 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
-import com.ubbackend.enumerations.EShift;
+import com.ubbackend.enumeration.EShift;
 
 public class CourseUpdateDTO {
     private Long id;

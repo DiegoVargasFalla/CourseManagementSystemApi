@@ -1,6 +1,6 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
-public class CreateAccessCodeDTO {
+public class AccessCodeCreatedDTO {
     private String emailCreator;
     private String rolType;
 

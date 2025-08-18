@@ -1,9 +1,13 @@
 package com.ubbackend.services;
 
-import com.ubbackend.DTOs.CreateAccessCodeDTO;
+import com.ubbackend.DTO.AccessCodeCreatedDTO;
+import com.ubbackend.model.AccessCodeEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AccessCodeService {
-    Optional<Long> generateAccessCode(CreateAccessCodeDTO createAccessCodeDTO) throws Exception;
+    List<AccessCodeEntity> getAllAccessCode();
+    Optional<Long> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception;
+    Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) throws Exception;
 }

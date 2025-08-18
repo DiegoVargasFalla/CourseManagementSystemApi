@@ -1,8 +1,6 @@
-package com.ubbackend.DTOs;
+package com.ubbackend.DTO;
 
-public class StudentDTO {
-
-    private Long idCourse;
+public class StudentUpdateDTO {
 
     private String name;
 
@@ -10,18 +8,11 @@ public class StudentDTO {
 
     private Long dni;
 
-    public Long getIdCourse() {
-        return idCourse;
-    }
-
-    public void setIdCourse(Long idCourse) {
-        this.idCourse = idCourse;
-    }
+    private int numSemester;
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -29,7 +20,6 @@ public class StudentDTO {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -37,8 +27,14 @@ public class StudentDTO {
     public Long getDni() {
         return dni;
     }
-
     public void setDni(Long dni) {
         this.dni = dni;
+    }
+
+    public int getNumSemester() {
+        return this.numSemester;
+    }
+    public void setNumSemester(int numSemester) {
+        this.numSemester = numSemester;
     }
 }

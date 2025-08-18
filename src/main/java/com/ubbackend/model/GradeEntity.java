@@ -1,6 +1,7 @@
 package com.ubbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,12 +16,12 @@ public class GradeEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "studentId")
-    @JsonBackReference
+    @JsonManagedReference
     private StudentEntity studentEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId")
-    @JsonBackReference
+    @JsonManagedReference
     private CourseEntity courseEntity;
 
     public Long getId() {
