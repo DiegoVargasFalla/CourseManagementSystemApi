@@ -59,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public boolean createCourse(CourseDTO courseDTO) throws Exception {
+    public Optional<CourseEntity> createCourse(CourseDTO courseDTO) throws Exception {
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setName(courseDTO.getName());
         courseEntity.setAverage(0.0F);
@@ -75,11 +75,10 @@ public class CourseServiceImpl implements CourseService {
         }
 
         try {
-            courseRepository.save(courseEntity);
+            return Optional.of(courseRepository.save(courseEntity));
         } catch (Exception e) {
-            throw new ResourceNotCreatedException("Course couldn't be created");
+            throw new ResourceNotCreatedException("Course couldn't be created", e.getCause());
         }
-        return true;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Optional<CourseEntity> newStudent(NewStudentDTO newStudentDTO) throws Exception {
+    public Optional<CourseRecursionDTO> newStudent(NewStudentDTO newStudentDTO) throws Exception {
 
         Optional<CourseEntity> courseExisting = courseRepository.findById(newStudentDTO.getCourseId());
         Optional<StudentEntity> studentExisting = studentRepository.findByDni(newStudentDTO.getDni());
@@ -120,9 +119,17 @@ public class CourseServiceImpl implements CourseService {
 
             StudentEntity studentEntity = studentExisting.get();
             CourseEntity courseEntity = courseExisting.get();
-            courseEntity.addStudent(studentEntity);
 
-            return Optional.of(courseRepository.save(courseEntity));
+            if(!courseEntity.getStudents().contains(studentEntity)) {
+                courseEntity.addStudent(studentEntity);
+            } else {
+                throw new ResourceNotCreatedException("Student already exists in this course");
+            }
+
+            CourseEntity createdCourseEntity = courseRepository.save(courseEntity);
+            CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+            courseRecursionDTO.toCourseRecursionDTO(createdCourseEntity);
+            return Optional.of(courseRecursionDTO);
         } else {
             throw new ResourceNotCreatedException("Could not created resource");
         }

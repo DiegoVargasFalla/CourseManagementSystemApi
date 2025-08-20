@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface CourseService {
     List<CourseRecursionDTO> getCourses();
     Optional<CourseRecursionDTO> getCourse(Long id) throws Exception;
-    boolean createCourse(CourseDTO courseDTO) throws Exception;
+    Optional<CourseEntity> createCourse(CourseDTO courseDTO) throws Exception;
     boolean deleteCourse(Long id) throws Exception;
     Optional<CourseEntity> updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception;
-    Optional<CourseEntity> newStudent(NewStudentDTO newStudentDTO) throws Exception;
+    Optional<CourseRecursionDTO> newStudent(NewStudentDTO newStudentDTO) throws Exception;
     boolean deleteStudentFromCourse(NewStudentDTO studentDTO);
 }

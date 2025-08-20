@@ -38,11 +38,10 @@ public class CourseController {
 
     @PostMapping("/courses")
     public ResponseEntity<CourseEntity> createCourse(@RequestBody CourseDTO courseDTO) throws Exception {
-        if(courseService.createCourse(courseDTO)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        Optional<CourseEntity> courseRecursionDTOExisting = courseService.createCourse(courseDTO);
+        return courseRecursionDTOExisting
+                .map(courseRecursionDTO -> ResponseEntity.status(HttpStatus.CREATED).body(courseRecursionDTO))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @DeleteMapping("/courses/{id}")
@@ -66,11 +65,11 @@ public class CourseController {
     }
 
     @PostMapping("/courses/students")
-    public ResponseEntity<CourseEntity> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
-        Optional<CourseEntity> courseExisting = courseService.newStudent(newStudentDTO);
+    public ResponseEntity<CourseRecursionDTO> addStudentToCourse(@RequestBody NewStudentDTO newStudentDTO) throws Exception {
+        Optional<CourseRecursionDTO> courseRecursionDTOExisting = courseService.newStudent(newStudentDTO);
 
-        return courseExisting
-                .map(courseEntity -> ResponseEntity.status(HttpStatus.OK).body(courseEntity))
+        return courseRecursionDTOExisting
+                .map(courseRecursionDTO -> ResponseEntity.status(HttpStatus.OK).body(courseRecursionDTO))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -102,5 +103,19 @@ public class StudentEntity {
 
     public void setCourses(Set<CourseEntity> courseEntityList) {
         this.courses = courseEntityList;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        StudentEntity that = (StudentEntity) obj;
+        return Objects.equals(id, that.getDni());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.dni);
     }
 }

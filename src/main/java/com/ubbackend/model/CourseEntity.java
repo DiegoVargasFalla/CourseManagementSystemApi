@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ubbackend.enumeration.EShift;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,11 +22,11 @@ public class CourseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade ={ CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private Set<StudentEntity> students;
+    private Set<StudentEntity> students = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "courseEntity")
     @JsonBackReference
-    private Set<GradeEntity> grades;
+    private Set<GradeEntity> grades = new HashSet<>();
 
     public void addStudent(StudentEntity studentEntity) {
         students.add(studentEntity);
