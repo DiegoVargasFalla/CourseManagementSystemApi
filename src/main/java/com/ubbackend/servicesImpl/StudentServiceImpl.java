@@ -69,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
     /**
      * metodo para crear un estudiante
      * @param studentDTO clase con los atributos del estudiante
-     * @return Optional
+     * @return Optional con el curso donde se creo el estudiante
      * @throws Exception si el estudiante ya existe o el curso no existe
      */
     @Override
@@ -115,7 +115,7 @@ public class StudentServiceImpl implements StudentService {
      * metodo para actualizar un estudiante
      * @param id atributo para buscar el estudiante
      * @param studentUpdateDTO datos del estudiante a actualizar
-     * @return un optional con StudentRecursionDTO
+     * @return Optional con StudentRecursionDTO
      */
     @Override
     public Optional<StudentRecursionDTO> updateStudent(Long id, StudentUpdateDTO studentUpdateDTO) {

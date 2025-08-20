@@ -29,7 +29,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses/{id}")
-    public ResponseEntity<CourseRecursionDTO> getCourseById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<CourseRecursionDTO> getCourseById(@PathVariable Long id) {
         Optional<CourseRecursionDTO> courseRecursionDTO = courseService.getCourse(id);
         return courseRecursionDTO
                 .map(recursionDTO -> ResponseEntity.status(HttpStatus.OK).body(recursionDTO)).

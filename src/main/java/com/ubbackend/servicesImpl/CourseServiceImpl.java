@@ -29,6 +29,10 @@ public class CourseServiceImpl implements CourseService {
         this.studentRepository = studentRepository;
     }
 
+    /**
+     * metodo para obtener todos los cursos existentes
+     * @return lista con todos los cursos
+     */
     @Override
     @Transactional
     public List<CourseRecursionDTO> getCourses() {
@@ -44,6 +48,12 @@ public class CourseServiceImpl implements CourseService {
         return courseRecursionDTOList;
     }
 
+    /**
+     * metodo para obtener un curso especifico
+     * @param id del curso que se quiere obtener
+     * @return Optional con el curso que se solicito con toda la informacion completa del mismo
+     * @throws Exception si no existe el curso informa con una excepcion
+     */
     @Override
     @Transactional
     public Optional<CourseRecursionDTO> getCourse(Long id) throws Exception {
@@ -57,6 +67,13 @@ public class CourseServiceImpl implements CourseService {
         return Optional.of(courseRecursionDTO);
     }
 
+    /**
+     * metodo para crear un curso
+     * @param courseDTO esta clase debe tener los atributos necesarios para crear el curso
+     * @return Optional con el curso creado
+     * @throws Exception en caso de que el turno del curso este mal escrito lanza una excepcion
+     * informando que el turno esta mal escrito
+     */
     @Override
     @Transactional
     public Optional<CourseEntity> createCourse(CourseDTO courseDTO) throws Exception {
@@ -81,6 +98,12 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
+    /**
+     * metodo para actualizar un curso
+     * @param courseUpdateDTO atributos del curso a actualizar
+     * @return Optional con el mismo curso que se acaba de actualizar
+     * @throws Exception en caso de que no se encuntre el curso con el id enviado, lanzara una excepcion
+     */
     @Override
     public Optional<CourseEntity> updateCourse(CourseUpdateDTO courseUpdateDTO) throws Exception {
         Optional<CourseEntity> courseExisting = courseRepository.findById(courseUpdateDTO.getId());
@@ -98,6 +121,12 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
+    /**
+     * metodo para eliminar un curso
+     * @param id del curso a eliminar
+     * @return valor booleano (true) si se elmino el curso, (false) si el curso que se quiere eliminar no existe
+     * @throws Exception
+     */
     @Override
     @Transactional
     public boolean deleteCourse(Long id) throws Exception {
@@ -108,6 +137,15 @@ public class CourseServiceImpl implements CourseService {
         return true;
     }
 
+    /**
+     * metodo para agregar un estudiante a un curso.
+     * @param newStudentDTO clase con los atributos necesarios para agregar un estudiante a un curso especifico
+     * @return Optional DTO del curso al cual se le agrego un estudiante
+     * @throws Exception en caso de que el estudiante ya exista en el curso, lanzara una excepcion;
+     * la verificacion de si ya existe, se hace por medio del dni.
+     * en caso de que el estudiante que se quiere agragar no exista o el curso no exista,
+     * lanzara un error infomrando que el curso o el estudiante no existe.
+     */
     @Override
     @Transactional
     public Optional<CourseRecursionDTO> newStudent(NewStudentDTO newStudentDTO) throws Exception {
@@ -131,10 +169,17 @@ public class CourseServiceImpl implements CourseService {
             courseRecursionDTO.toCourseRecursionDTO(createdCourseEntity);
             return Optional.of(courseRecursionDTO);
         } else {
-            throw new ResourceNotCreatedException("Could not created resource");
+            throw new ResourceNotCreatedException("Course or student does´t exist");
         }
     }
 
+    /**
+     * metodo para eliminar un estudiante de un curso
+     * @param studentDTO atributos neceasarios para elminar el estudiante
+     * @return valor boooleano (true) si se elimino el estudiante, si el
+     * estudiante no existe o el curso del que se quiere eliminar el
+     * estudiante no existe lanza una excepcion
+     */
     @Override
     @Transactional
     public boolean deleteStudentFromCourse(NewStudentDTO studentDTO) {

@@ -25,6 +25,11 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepository.findAll();
     }
 
+    /**
+     * metodo para eliminar una nota
+     * @param id de la nota a eliminar
+     * @return valor booleano (true) si se elimino la nota de lo contrario informa con un error si no existe esa nota
+     */
     @Override
     public boolean deleteGrade(Long id) {
         Optional<GradeEntity> grade = gradeRepository.findById(id);
@@ -32,12 +37,18 @@ public class GradeServiceImpl implements GradeService {
             gradeRepository.delete(grade.get());
             return true;
         }
-        throw new ResourceNotFoundException("Note couldn't be deleted");
+        throw new ResourceNotFoundException("Grade couldn't be deleted");
     }
 
+    /**
+     * metodo para actualizar el valor de la nota
+     * @param gradeId id de la calificacion a actualizar
+     * @param value valor nuevo para actualizar el valor anterior de la calificación
+     * @return Optional con la clase completa de la calificacion actualizada o empty si no se encontro la nota
+     */
     @Override
-    public Optional<GradeRecursionDTO> updateGrade(Long grade, Float value) {
-        Optional<GradeEntity> gradeEntityExisting = gradeRepository.findById(grade);
+    public Optional<GradeRecursionDTO> updateGrade(Long gradeId, Float value) {
+        Optional<GradeEntity> gradeEntityExisting = gradeRepository.findById(gradeId);
         if(gradeEntityExisting.isPresent()) {
             GradeEntity gradeEntity = gradeEntityExisting.get();
             gradeEntity.setGrade(value);
@@ -48,7 +59,6 @@ public class GradeServiceImpl implements GradeService {
             gradeRecursionDTO.setGrade(gradeEntity.getGrade());
 
             return Optional.of(gradeRecursionDTO);
-
         }
         return Optional.empty();
     }

@@ -24,6 +24,10 @@ public class AccessCodeServiceImpl implements AccessCodeService {
         this.accessCodeRepository = accessCodeRepository;
     }
 
+    /**
+     * metodo para obtener todos los codigos de acceso generados
+     * @return lista de los codigos de acceso existentes
+     */
     @Override
     public List<AccessCodeEntity> getAllAccessCode() {
         List<AccessCodeEntity> accessCodeEntities = accessCodeRepository.findAll();
@@ -34,6 +38,13 @@ public class AccessCodeServiceImpl implements AccessCodeService {
         return accessCodeEntities;
     }
 
+    /**
+     * metodo para generar un codigo de acceso
+     * @param accessCodeCreatedDTO atriutos necesarios para generar un codigo de acceso
+     * @return Optional con el codigo de 6 digitos
+     * @throws Exception si el usuario que esta generando el codigo no existe lanzara
+     * una axcepcion informando que el codigo no se pudo crear
+     */
     @Override
     public Optional<Long> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
@@ -61,8 +72,14 @@ public class AccessCodeServiceImpl implements AccessCodeService {
         }
     }
 
+    /**
+     * metodo para cancelar el codigo de acceso y que no se pueda usar
+     * @param accessCodeId atributos para cancelar el codigo de acceso
+     * @return codigo de acceso cancelado, el atributo active deve estar en false
+     * @throws Exception si el codigo no existe retornara un Optional vacio
+     */
     @Override
-    public Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) throws Exception {
+    public Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) {
         Optional<AccessCodeEntity> accessCodeEntity = accessCodeRepository.findById(accessCodeId);
         if(accessCodeEntity.isPresent()) {
             accessCodeEntity.get().setActive(false);
