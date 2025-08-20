@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws Exception {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
 
         if(userServiceImpl.deleteUser(id)) {
             return ResponseEntity.status(HttpStatus.OK).body("User successfully deleted");

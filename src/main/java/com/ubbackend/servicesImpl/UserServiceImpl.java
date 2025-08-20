@@ -30,6 +30,10 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * este metodo retorna la lista de usuario completa
+     * @return lista de userResponseList
+     */
     @Override
     public List<UserResponseDTO> getUsers() {
 
@@ -49,6 +53,12 @@ public class UserServiceImpl implements UserService {
         return userResponseDTOList;
     }
 
+    /**
+     * metodo para buscar un usuario por email
+     * @param email de usuario
+     * @return tipo de dato Optionl con UserResponseDTO dentro
+     * @throws Exception en caso de no existir el usuario informa con una excepcion que no existe,
+     */
     @Override
     public Optional<UserResponseDTO> getUser(String email) throws Exception {
         Optional<UserEntity> userExisting = userRepository.findByEmail(email);
@@ -65,6 +75,12 @@ public class UserServiceImpl implements UserService {
         throw new UserExistException("User does´t exist");
     }
 
+    /**
+     * metodo para crear un usuario
+     * @param userEntityDTO con los atributos necearios para crear el usuario
+     * @return boolean para verificar si se creo o no
+     * @throws Exception si el usuario ya existe informa con una excepcion, la verificaicon se hace con el email
+     */
     @Override
     @Transactional
     public boolean createUser(UserEntityDTO userEntityDTO) throws Exception {
@@ -115,6 +131,13 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * metodo para actualizar un usuario
+     * @param id para buscar el usuario
+     * @param userUpdateDTO DTO con los atributos nuevos a cambiar en un usuario
+     * @return Optional con un UserResponse dentro que tiene los atributos actualizados y si no un empty (sin nada)
+     * @throws Exception si el usuario no existe informa con un Excepción
+     */
     @Override
     public Optional<UserResponseDTO> updateUser(Long id, UserUpdateDTO userUpdateDTO) throws Exception {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
@@ -145,8 +168,13 @@ public class UserServiceImpl implements UserService {
         throw new UserExistException("User does not exist");
     }
 
+    /**
+     * metodo para eliminar un usuario
+     * @param id del usuario a eliminar
+     * @return valor booleano para verificar que se elimino y si no existe retorna false
+     */
     @Override
-    public boolean deleteUser(Long id) throws Exception {
+    public boolean deleteUser(Long id) {
 
         if(userRepository.existsById(id)) {
             userRepository.deleteById(id);

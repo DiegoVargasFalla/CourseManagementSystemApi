@@ -16,11 +16,7 @@ java {
 repositories {
     mavenCentral()
 }
-// jdbc:postgresql://db.yylktgukfamnappzirae.supabase.co:5432/postgres
-// posstgres - g7jiY5viFZ0YH1oA
 
-// jdbc:mysql://localhost:3306/ub-project?serverTimezone=UTC
-// divar
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'

@@ -30,6 +30,10 @@ public class StudentServiceImpl implements StudentService {
         this.gradeRepository = gradeRepository;
     }
 
+    /**
+     * metodo para obtener la lista de estudiantes
+     * @return Lista con StudentRecursionDTO
+     */
     @Override
     @Transactional
     public List<StudentRecursionDTO> getStudents() {
@@ -45,6 +49,12 @@ public class StudentServiceImpl implements StudentService {
         return studentRecursionDTOList;
     }
 
+    /**
+     * metodo para buscar un eestudiante
+     * @param id del usuario a buscar
+     * @return un Optional con un StudentRecursionDTO dentro.
+     * @throws Exception si no exite el estudante informa con una excepcion
+     */
     @Override
     public Optional<StudentRecursionDTO> getStudent(Long id) throws Exception {
         Optional<StudentEntity> studentExisting = studentRepository.findById(id);
@@ -56,6 +66,12 @@ public class StudentServiceImpl implements StudentService {
         return Optional.of(studentRecursionDTO);
     }
 
+    /**
+     * metodo para crear un estudiante
+     * @param studentDTO clase con los atributos del estudiante
+     * @return Optional
+     * @throws Exception
+     */
     @Override
     @Transactional
     public Optional<CourseRecursionDTO> createStudent(StudentDTO studentDTO) throws Exception{
@@ -95,8 +111,15 @@ public class StudentServiceImpl implements StudentService {
         return true;
     }
 
+    /**
+     * metodo para actualizar un estudiante
+     * @param id atributo para buscar el estudiante
+     * @param studentUpdateDTO datos del estudiante a actualizar
+     * @return un optional con StudentRecursionDTO
+     * @throws Exception
+     */
     @Override
-    public Optional<StudentRecursionDTO> updateStudent(Long id, StudentUpdateDTO studentUpdateDTO) throws Exception{
+    public Optional<StudentRecursionDTO> updateStudent(Long id, StudentUpdateDTO studentUpdateDTO) {
         Optional<StudentEntity> studentExisting = studentRepository.findById(id);
         
         if(studentExisting.isPresent()){
@@ -127,8 +150,13 @@ public class StudentServiceImpl implements StudentService {
         return Optional.empty();
     }
 
+    /**
+     * metodo para agregar una nota al estudiante
+     * @param studentGradeDTO datos para crear la nota
+     * @return Optional con StudentRecursionDTO si se agrego la nota y si no empty (sin nada)
+     */
     @Override
-    public Optional<StudentRecursionDTO> addGradeToStudent(StudentGradeDTO studentGradeDTO) throws Exception {
+    public Optional<StudentRecursionDTO> addGradeToStudent(StudentGradeDTO studentGradeDTO) {
         Optional<StudentEntity> studentExisting = studentRepository.findById(studentGradeDTO.getStudentId());
         Optional<CourseEntity> courseExisting = courseRepository.findById(studentGradeDTO.getCourseId());
 

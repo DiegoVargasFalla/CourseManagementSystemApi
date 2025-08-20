@@ -13,5 +13,5 @@ public interface UserService {
     Optional<UserResponseDTO> getUser(String username) throws Exception;
     boolean createUser(UserEntityDTO userEntityDTO) throws Exception;
     Optional<UserResponseDTO> updateUser(Long id, UserUpdateDTO userUpdateDTO) throws Exception;
-    boolean deleteUser(Long id) throws Exception;
+    boolean deleteUser(Long id);
 }
