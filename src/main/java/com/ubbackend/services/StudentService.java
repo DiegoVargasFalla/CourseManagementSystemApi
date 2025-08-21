@@ -9,7 +9,7 @@ public interface StudentService {
     Optional<CourseRecursionDTO> createStudent(StudentDTO studentDTO) throws Exception;
     Optional<StudentRecursionDTO> getStudent(Long id) throws Exception;
     List<StudentRecursionDTO> getStudents();
-    boolean deleteStudent(Long id) throws Exception;
+    boolean deleteStudent(Long id);
     Optional<StudentRecursionDTO> updateStudent(Long id , StudentUpdateDTO studentUpdateDTO) throws Exception;
     Optional<StudentRecursionDTO> addGradeToStudent(StudentGradeDTO studentGradeDTO) throws Exception;
 }
