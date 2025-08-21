@@ -4,11 +4,13 @@ import com.ubbackend.DTO.*;
 import com.ubbackend.services.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,67 +32,227 @@ public class StudentController {
 
     @GetMapping("/students")
     @Operation(
-            summary = "Method getStudents",
-            description = "this method return all students in DB"
+            summary = "fetch all students",
+            description = "This method return all students in DB",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "List of students",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            type = "array",
+                                            implementation = StudentRecursionDTO.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error"
+                    )
+            }
     )
     public ResponseEntity<List<StudentRecursionDTO>> getStudents() {
         System.out.println("-> at students ##### ");
         return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
     }
 
+    @Operation(
+            summary = "fetch a student",
+            description = "Method to get a student",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "A student",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = StudentRecursionDTO.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Student not found"
+                    )
+            }
+    )
     @GetMapping("/students/{id}")
-    public ResponseEntity<StudentRecursionDTO> getStudent(@PathVariable Long id) throws Exception {
+    public ResponseEntity<StudentRecursionDTO> getStudent(
+            @Parameter(
+                    name = "id",
+                    description = "The student id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            format = "Long",
+                            description = "Param ID student that needs to be fetched",
+                            allowableValues = {"1", "2", "3"}
+                    )
+            ) @PathVariable Long id) throws Exception {
         System.out.println("-> at student ##### ");
         Optional<StudentRecursionDTO> studentRecursionExisting = studentService.getStudent(id);
         return studentRecursionExisting
                 .map(studentRecursionDTO -> ResponseEntity.status(HttpStatus.OK).body(studentRecursionDTO))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.OK).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/students")
+
     @Operation(
+            summary = "Create a student",
+            description = "Method to create student, view all attributes in StudentDTO",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "this method receive a class with all attributes for create student",
+                    description = "this method receive a class with all attributes for create student, view all attributes in StudentDTO",
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = StudentDTO.class)
                     )
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Successful student create",
+                            description = "The student successfully created, and the response is the course where student was saved",
                             content = @Content(
-                                    mediaType = "application/json",
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = CourseRecursionDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "The course does´t exist, The student could´t be created"
+
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Dni is has already been used, internal server error"
                     )
             }
     )
+    @PostMapping("/students")
     public ResponseEntity<CourseRecursionDTO> createStudent(@RequestBody StudentDTO studentDTO) throws Exception {
         Optional<CourseRecursionDTO> courseExisting = studentService.createStudent(studentDTO);
         return courseExisting
                 .map(courseRecursionDTO -> ResponseEntity.status(HttpStatus.CREATED).body(courseRecursionDTO))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
+    @Operation(
+            summary = "Delete a student",
+            description = "Method to remove a student whit the id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Student successfully deleted",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = String.class,
+                                            description = "Info message that student was deleted"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "The user id doesn't exist"
+                    )
+            }
+    )
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id) throws Exception {
+    public ResponseEntity<String> deleteStudent(@Parameter(
+            name = "id",
+            description = "The student id",
+            required = true,
+            schema = @Schema(
+                    type = "Integer",
+                    description = "Param ID student that needs to be removed",
+                    allowableValues = {"1", "2", "3"}
+            )
+    ) @PathVariable Long id) {
         if(!studentService.deleteStudent(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully");
     }
 
+    @Operation(
+            summary = "Update student",
+            description = "Method to update student",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "this method receive a class with all attributes for update student, view all attributes in StudentUpdateDTO",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = StudentUpdateDTO.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The user successfully update",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = StudentRecursionDTO.class,
+                                            description = "The student updated"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "The student doesn't exist"
+                    )
+            }
+    )
     @PatchMapping("/students/{id}")
-    public ResponseEntity<StudentRecursionDTO> updateStudent(@PathVariable Long id, @RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
+    public ResponseEntity<StudentRecursionDTO> updateStudent(@Parameter(
+            name = "id",
+            description = "The student id",
+            required = true,
+            schema = @Schema(
+                    type = "Integer",
+                    description = "Param ID student that needs to be updated",
+                    allowableValues = {"1", "2", "3"}
+            )
+    ) @PathVariable Long id, @RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
         Optional<StudentRecursionDTO> studentRecursionExisting = studentService.updateStudent(id, studentUpdateDTO);
         return studentRecursionExisting
         .map(student -> ResponseEntity.status(HttpStatus.OK).body(student))
         .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
+    @Operation(
+            summary = "Add grade to student",
+            description = "Method to add grade to the student",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "This method receive a class whit all attributes to add grade to the student, view all attributes in StudentGradeDTO",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(
+                                    description = "Class whit all attributes to add a new grade",
+                                    implementation = StudentGradeDTO.class
+                            )
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Student whit all grades and whit the latest grade added",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            description = "Student update whit the new grade",
+                                            implementation = StudentRecursionDTO.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Student or course not found"
+                    )
+            }
+    )
     @PostMapping("students/notes")
     public ResponseEntity<StudentRecursionDTO> addGradeToStudent(@RequestBody StudentGradeDTO studentGradeDTO) throws Exception {
 
