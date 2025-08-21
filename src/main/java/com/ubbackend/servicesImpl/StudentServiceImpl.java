@@ -98,14 +98,14 @@ public class StudentServiceImpl implements StudentService {
             courseRecursionDTO.toCourseRecursionDTO(newCourseEntity);
             return Optional.of(courseRecursionDTO);
         } else {
-            throw new ResourceNotCreatedException("Course not exist");
+            return Optional.empty();
         }
     }
 
     @Override
-    public boolean deleteStudent(Long id) throws Exception {
+    public boolean deleteStudent(Long id) {
         if(!studentRepository.existsById(id)){
-            throw new Exception("Student not found!");
+            return false;
         }
         studentRepository.deleteById(id);
         return true;
