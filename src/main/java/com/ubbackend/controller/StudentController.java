@@ -3,6 +3,11 @@ package com.ubbackend.controller;
 import com.ubbackend.DTO.*;
 import com.ubbackend.services.StudentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +17,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
+@Tag(
+        name = "Student controller",
+        description = "Student controller where all the endpoints are")
 public class StudentController {
 
     private final StudentService studentService;
@@ -21,6 +29,10 @@ public class StudentController {
     }
 
     @GetMapping("/students")
+    @Operation(
+            summary = "Method getStudents",
+            description = "this method return all students in DB"
+    )
     public ResponseEntity<List<StudentRecursionDTO>> getStudents() {
         System.out.println("-> at students ##### ");
         return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudents());
@@ -36,6 +48,26 @@ public class StudentController {
     }
 
     @PostMapping("/students")
+    @Operation(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "this method receive a class with all attributes for create student",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = StudentDTO.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successful student create",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CourseRecursionDTO.class)
+                            )
+                    )
+            }
+    )
     public ResponseEntity<CourseRecursionDTO> createStudent(@RequestBody StudentDTO studentDTO) throws Exception {
         Optional<CourseRecursionDTO> courseExisting = studentService.createStudent(studentDTO);
         return courseExisting

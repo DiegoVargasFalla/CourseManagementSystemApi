@@ -25,7 +25,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("/system/api/v1/create/user").permitAll()
+                                .requestMatchers(
+                                        "/system/api/v1/create/user",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .headers(header -> header.contentSecurityPolicy(csp -> csp
