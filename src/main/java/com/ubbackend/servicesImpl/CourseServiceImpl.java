@@ -52,16 +52,15 @@ public class CourseServiceImpl implements CourseService {
      * metodo para obtener un curso especifico
      * @param id del curso que se quiere obtener
      * @return Optional con el curso que se solicito con toda la informacion completa del mismo
-     * @throws Exception si no existe el curso informa con una excepcion
      */
     @Override
     @Transactional
-    public Optional<CourseRecursionDTO> getCourse(Long id) throws Exception {
+    public Optional<CourseRecursionDTO> getCourse(Long id) {
         CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
         Optional<CourseEntity> courseExisting = courseRepository.findById(id);
 
         if(courseExisting.isEmpty()) {
-            throw new NotFundCourseException("Course not exist");
+            return Optional.empty();
         }
         courseRecursionDTO.toCourseRecursionDTO(courseExisting.get());
         return Optional.of(courseRecursionDTO);
@@ -77,6 +76,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Optional<CourseEntity> createCourse(CourseDTO courseDTO) throws Exception {
+
         CourseEntity courseEntity = new CourseEntity();
         courseEntity.setName(courseDTO.getName());
         courseEntity.setAverage(0.0F);
@@ -88,14 +88,9 @@ public class CourseServiceImpl implements CourseService {
         } else if(courseDTO.getShift().equals(EShift.EVENING.toString())) {
             courseEntity.setShift(EShift.EVENING);
         } else {
-            throw new ResourceNotCreatedException("The course schedule is wrong");
+            return Optional.empty();
         }
-
-        try {
-            return Optional.of(courseRepository.save(courseEntity));
-        } catch (Exception e) {
-            throw new ResourceNotCreatedException("Course couldn't be created", e.getCause());
-        }
+        return Optional.of(courseRepository.save(courseEntity));
     }
 
     /**
@@ -125,7 +120,6 @@ public class CourseServiceImpl implements CourseService {
      * metodo para eliminar un curso
      * @param id del curso a eliminar
      * @return valor booleano (true) si se elmino el curso, (false) si el curso que se quiere eliminar no existe
-     * @throws Exception
      */
     @Override
     @Transactional
@@ -169,7 +163,7 @@ public class CourseServiceImpl implements CourseService {
             courseRecursionDTO.toCourseRecursionDTO(createdCourseEntity);
             return Optional.of(courseRecursionDTO);
         } else {
-            throw new ResourceNotCreatedException("Course or student does´t exist");
+            return Optional.empty();
         }
     }
 
@@ -182,18 +176,23 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     @Transactional
-    public boolean deleteStudentFromCourse(NewStudentDTO studentDTO) {
+    public Optional<CourseRecursionDTO> deleteStudentFromCourse(NewStudentDTO studentDTO) {
 
         Optional<StudentEntity> studentExisting = studentRepository.findByDni(studentDTO.getDni());
         Optional<CourseEntity> courseExisting = courseRepository.findById(studentDTO.getCourseId());
+
         if(studentExisting.isPresent() && courseExisting.isPresent()) {
             StudentEntity studentEntity = studentExisting.get();
             CourseEntity courseEntity = courseExisting.get();
 
             courseEntity.getStudents().remove(studentEntity);
-            courseRepository.save(courseEntity);
-            return true;
+            CourseEntity courseEntityUpdate =  courseRepository.save(courseEntity);
+
+            CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+            courseRecursionDTO.toCourseRecursionDTO(courseEntityUpdate);
+
+            return Optional.of(courseRecursionDTO);
         }
-        throw new IllegalArgumentException("Course or student not found");
+        return Optional.empty();
     }
 }

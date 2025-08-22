@@ -3,7 +3,8 @@ package com.ubbackend.servicesImpl;
 import com.ubbackend.DTO.UserEntityDTO;
 import com.ubbackend.DTO.UserResponseDTO;
 import com.ubbackend.DTO.UserUpdateDTO;
-import com.ubbackend.exception.UserExistException;
+import com.ubbackend.exception.ResourceNotCreatedException;
+import com.ubbackend.exception.ResourceNotFoundException;
 import com.ubbackend.enumeration.ERol;
 import com.ubbackend.model.AccessCodeEntity;
 import com.ubbackend.model.RolEntity;
@@ -41,38 +42,25 @@ public class UserServiceImpl implements UserService {
         List<UserResponseDTO> userResponseDTOList = new ArrayList<>();
 
         for(UserEntity user : usersResponseDTO) {
-
-            UserResponseDTO userResponseDTO = new UserResponseDTO();
-
-            userResponseDTO.setId(user.getId());
-            userResponseDTO.setName(user.getName());
-            userResponseDTO.setEmail(user.getEmail());
-            userResponseDTO.setDni(user.getDni());
-            userResponseDTOList.add(userResponseDTO);
+            userResponseDTOList.add(extractUser(user));
         }
         return userResponseDTOList;
     }
 
     /**
      * metodo para buscar un usuario por email
-     * @param email de usuario
+     * @param id de usuario
      * @return tipo de dato Optionl con UserResponseDTO dentro
-     * @throws Exception en caso de no existir el usuario informa con una excepcion que no existe,
      */
     @Override
-    public Optional<UserResponseDTO> getUser(String email) throws Exception {
-        Optional<UserEntity> userExisting = userRepository.findByEmail(email);
+    public Optional<UserResponseDTO> getUser(Long id) {
+        Optional<UserEntity> userExisting = userRepository.findById(id);
 
         if(userExisting.isPresent()) {
             UserEntity user = userExisting.get();
-            UserResponseDTO userResponseDTO = new UserResponseDTO();
-            userResponseDTO.setId(user.getId());
-            userResponseDTO.setName(user.getName());
-            userResponseDTO.setEmail(user.getEmail());
-            userResponseDTO.setDni(user.getDni());
-            return Optional.of(userResponseDTO);
+            return Optional.of(extractUser(user));
         }
-        throw new UserExistException("User does´t exist");
+        return Optional.empty();
     }
 
     /**
@@ -83,13 +71,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public boolean createUser(UserEntityDTO userEntityDTO) throws Exception {
+    public Optional<UserResponseDTO> createUser(UserEntityDTO userEntityDTO) throws Exception {
 
-        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(userEntityDTO.getEmail());
+        Optional<UserEntity> optionalUserEntityEmail = userRepository.findByEmail(userEntityDTO.getEmail());
+        Optional<UserEntity> optionalUserEntityDni = userRepository.findByDni(userEntityDTO.getDni());
 
-        if(optionalUserEntity.isPresent()) {
-            throw new UserExistException("User already exist");
-        } else if(userEntityDTO.getAccessCode() != null) {
+        if(optionalUserEntityEmail.isEmpty() && optionalUserEntityDni.isEmpty()) {
 
             Optional<AccessCodeEntity> accessCodeExisting = accessCodeRepository.findByCode(userEntityDTO.getAccessCode());
 
@@ -119,16 +106,17 @@ public class UserServiceImpl implements UserService {
                     userEntity.setDni(userEntityDTO.getDni());
                     userEntity.setRoles(roles);
 
-                    userRepository.save(userEntity);
+                    UserEntity user = userRepository.save(userEntity);
+                    return Optional.of(extractUser(user));
                 }
                 else {
-                    throw new UserExistException("Access code has expired");
+                    throw new ResourceNotCreatedException("Access code has expired");
                 }
+            } else {
+                throw new ResourceNotFoundException("Access code not found");
             }
-        }  else {
-            return false;
         }
-        return true;
+        return Optional.empty();
     }
 
     /**
@@ -151,21 +139,15 @@ public class UserServiceImpl implements UserService {
             if(userUpdateDTO.getEmail() != null) {
                 userEntity.setEmail(userUpdateDTO.getEmail());
             }
-            if(userUpdateDTO.getDni() != null) {
+            if(userUpdateDTO.getDni() != 0) {
                 userEntity.setDni(userUpdateDTO.getDni());
             }
 
             UserEntity userUpdate = userRepository.save(userEntity);
 
-            UserResponseDTO userResponseDTO = new UserResponseDTO();
-            userResponseDTO.setId(userUpdate.getId());
-            userResponseDTO.setName(userUpdate.getName());
-            userResponseDTO.setEmail(userUpdate.getEmail());
-            userResponseDTO.setDni(userUpdate.getDni());
-
-            return Optional.of(userResponseDTO);
+            return Optional.of(extractUser(userUpdate));
         }
-        throw new UserExistException("User does not exist");
+        return Optional.empty();
     }
 
     /**
@@ -181,5 +163,15 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    public static UserResponseDTO extractUser(UserEntity user) {
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setName(user.getName());
+        userResponseDTO.setEmail(user.getEmail());
+        userResponseDTO.setDni(user.getDni());
+        return userResponseDTO;
     }
 }
