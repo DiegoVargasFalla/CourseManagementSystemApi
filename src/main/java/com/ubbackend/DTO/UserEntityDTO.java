@@ -1,5 +1,7 @@
 package com.ubbackend.DTO;
 
+import java.util.Objects;
+
 public class UserEntityDTO {
     private String name;
     private String email;
