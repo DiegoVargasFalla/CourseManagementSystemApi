@@ -12,16 +12,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/v1")
+
 @Tag(
         name = "Student controller",
-        description = "Student controller where all the endpoints are")
+        description = "Student controller where all the endpoints are located"
+)
+@RestController
+@RequestMapping("/v1")
 public class StudentController {
 
     private final StudentService studentService;
@@ -48,7 +51,13 @@ public class StudentController {
                     ),
                     @ApiResponse(
                             responseCode = "500",
-                            description = "Internal server error"
+                            description = "Internal server error",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
                     )
             }
     )
@@ -73,7 +82,11 @@ public class StudentController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Student not found"
+                            description = "Student not found",
+                            content =  @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
                     )
             }
     )
@@ -111,7 +124,7 @@ public class StudentController {
             ),
             responses = {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = "201",
                             description = "The student successfully created, and the response is the course where student was saved",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -120,12 +133,20 @@ public class StudentController {
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "The course does´t exist, The student could´t be created"
+                            description = "The course does´t exist, The student could´t be created",
+                            content =  @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
 
                     ),
                     @ApiResponse(
                             responseCode = "500",
-                            description = "Dni is has already been used, internal server error"
+                            description = "Dni is has already been used, internal server error",
+                            content =  @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
                     )
             }
     )
@@ -154,20 +175,25 @@ public class StudentController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "The user id doesn't exist"
+                            description = "The user id doesn't exist",
+                            content =  @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
                     )
             }
     )
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<String> deleteStudent(@Parameter(
-            name = "id",
-            description = "The student id",
-            required = true,
-            schema = @Schema(
-                    type = "Integer",
-                    description = "Param ID student that needs to be removed",
-                    allowableValues = {"1", "2", "3"}
-            )
+    public ResponseEntity<String> deleteStudent(
+            @Parameter(
+                    name = "id",
+                    description = "The student id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID student that needs to be removed",
+                            allowableValues = {"1", "2", "3"}
+                    )
     ) @PathVariable Long id) {
         if(!studentService.deleteStudent(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -179,7 +205,15 @@ public class StudentController {
             summary = "Update student",
             description = "Method to update student",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "this method receive a class with all attributes for update student, view all attributes in StudentUpdateDTO",
+                    description = """
+                            this method receive a class with all attributes to update student.
+                            \s
+                             IMPORTANT\s
+                            \s
+                            if you don't want to update any attribute of type text, just send (null).
+                            \s
+                            In the case of Dni and Semester, if you don't want to update send 0, Otherwise send num > 0.
+                            \s""",
                     required = true,
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -199,26 +233,31 @@ public class StudentController {
                             )
                     ),
                     @ApiResponse(
-                            responseCode = "400",
-                            description = "The student doesn't exist"
+                            responseCode = "404",
+                            description = "The student doesn't exist",
+                            content =  @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
                     )
             }
     )
     @PatchMapping("/students/{id}")
-    public ResponseEntity<StudentRecursionDTO> updateStudent(@Parameter(
-            name = "id",
-            description = "The student id",
-            required = true,
-            schema = @Schema(
-                    type = "Integer",
-                    description = "Param ID student that needs to be updated",
-                    allowableValues = {"1", "2", "3"}
-            )
+    public ResponseEntity<StudentRecursionDTO> updateStudent(
+            @Parameter(
+                    name = "id",
+                    description = "The student id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID student that needs to be updated",
+                            allowableValues = {"1", "2", "3"}
+                    )
     ) @PathVariable Long id, @RequestBody StudentUpdateDTO studentUpdateDTO) throws Exception {
         Optional<StudentRecursionDTO> studentRecursionExisting = studentService.updateStudent(id, studentUpdateDTO);
         return studentRecursionExisting
         .map(student -> ResponseEntity.status(HttpStatus.OK).body(student))
-        .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+        .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Operation(
@@ -249,7 +288,11 @@ public class StudentController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Student or course not found"
+                            description = "Student or course not found",
+                            content =  @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
                     )
             }
     )
