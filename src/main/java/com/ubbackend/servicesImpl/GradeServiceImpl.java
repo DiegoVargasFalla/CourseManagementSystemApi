@@ -37,7 +37,7 @@ public class GradeServiceImpl implements GradeService {
             gradeRepository.delete(grade.get());
             return true;
         }
-        throw new ResourceNotFoundException("Grade couldn't be deleted");
+        return false;
     }
 
     /**
@@ -50,6 +50,7 @@ public class GradeServiceImpl implements GradeService {
     public Optional<GradeRecursionDTO> updateGrade(Long gradeId, Float value) {
         Optional<GradeEntity> gradeEntityExisting = gradeRepository.findById(gradeId);
         if(gradeEntityExisting.isPresent()) {
+
             GradeEntity gradeEntity = gradeEntityExisting.get();
             gradeEntity.setGrade(value);
             gradeRepository.save(gradeEntity);

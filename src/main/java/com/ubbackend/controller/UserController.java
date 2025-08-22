@@ -63,11 +63,10 @@ public class UserController {
             }
     )
     @GetMapping("/users")
-
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers());
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+
     @Operation(
             summary = "fetch a user",
             description = "Method to get a user",
@@ -92,6 +91,7 @@ public class UserController {
                     )
             }
     )
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponseDTO> getUser(
             @Parameter(
