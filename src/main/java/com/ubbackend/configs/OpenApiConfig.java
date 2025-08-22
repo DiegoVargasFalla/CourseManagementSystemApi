@@ -20,26 +20,26 @@ import org.springframework.http.HttpHeaders;
         servers = {
                 @Server(
                         description = "Dev server",
-                        url = "http://localhost:8080"
+                        url = "http://localhost:8080/system/api"
                 ),
                 @Server(
                         description = "Prod server",
                         url = "https://diegodev.net:8080"
                 )
-        }
-//        security = @SecurityRequirement(
-//                name = "Security token"
-//        )
+        },
+        security = @SecurityRequirement(
+                name = "Security token"
+        )
 )
-//@SecurityScheme(
-//        name = "Security token",
-//        description = "Access token for ubApi",
-//        type = SecuritySchemeType.HTTP,
-//        paramName = HttpHeaders.AUTHORIZATION,
-//        in = SecuritySchemeIn.HEADER,
-//        scheme = "bearer",
-//        bearerFormat = "JWT"
-//
-//)
+@SecurityScheme(
+        name = "Security token",
+        description = "Access token for ubApi",
+        type = SecuritySchemeType.HTTP,
+        paramName = HttpHeaders.AUTHORIZATION,
+        in = SecuritySchemeIn.HEADER,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+
+)
 public class OpenApiConfig {
 }
