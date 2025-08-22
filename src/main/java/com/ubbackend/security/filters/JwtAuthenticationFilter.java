@@ -29,8 +29,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public UserLoginDTO parseUserLoginDTO(HttpServletRequest request) {
         try {
-            System.out.println("-> Map UserLogin");
-
             //mapping of user whit library jackson
             return new ObjectMapper().readValue(request.getInputStream(), UserLoginDTO.class);
         } catch (IOException e) {
@@ -44,15 +42,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             UserLoginDTO userLoginDTO = parseUserLoginDTO(request);
-            System.out.println("-> ### After mapping ####");
-            System.out.println("-> userLoginDTO: " + userLoginDTO.getEmail() + " ---- " + userLoginDTO.getPassword());
 
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userLoginDTO.getEmail(),
                             userLoginDTO.getPassword()
-                    );
-
+                        );
             return getAuthenticationManager().authenticate(authenticationToken);
 
         } catch (RuntimeException e) {
