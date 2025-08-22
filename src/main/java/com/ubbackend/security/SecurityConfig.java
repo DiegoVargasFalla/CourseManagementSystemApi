@@ -1,8 +1,13 @@
 package com.ubbackend.security;
 
+import com.ubbackend.security.filters.JwtAuthenticationFilter;
+import com.ubbackend.security.filters.JwtAuthorizationFilter;
+import com.ubbackend.security.jwt.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,14 +16,27 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final JwtUtils jwtUtils;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+
+
+    public SecurityConfig(JwtUtils jwtUtils, JwtAuthorizationFilter jwtAuthorizationFilter) {
+        this.jwtUtils = jwtUtils;
+        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+    }
+
     @Bean
-    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
+
+         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
+         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
 
         return httpSecurity
                 .cors(Customizer.withDefaults())
@@ -26,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(
-                                        "/system/api/v1/create/user",
+                                        "/v1/users/create",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html").permitAll()
@@ -40,13 +58,19 @@ public class SecurityConfig {
                                         "form-action 'self'; "
                         )))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .httpBasic(Customizer.withDefaults())
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
