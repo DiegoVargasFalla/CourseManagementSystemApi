@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface UserService {
     List<UserResponseDTO> getUsers();
-    Optional<UserResponseDTO> getUser(String username) throws Exception;
-    boolean createUser(UserEntityDTO userEntityDTO) throws Exception;
+    Optional<UserResponseDTO> getUser(Long id);
+    Optional<UserResponseDTO> createUser(UserEntityDTO userEntityDTO) throws Exception;
     Optional<UserResponseDTO> updateUser(Long id, UserUpdateDTO userUpdateDTO) throws Exception;
     boolean deleteUser(Long id);
 }
