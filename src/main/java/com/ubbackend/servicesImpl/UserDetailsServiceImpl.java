@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -23,21 +24,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println("-> ingresando a loadByUsername");
 
         Optional<UserEntity> user = userRepository.findByEmail(email);
 
         if(user.isPresent()) {
-            System.out.println("-> ingresando al is present");
-            UserEntity userEntity = user.get();
 
+            UserEntity userEntity = user.get();
             Collection<? extends GrantedAuthority> authorities = userEntity.getRoles()
                     .stream()
                     .map( role -> new SimpleGrantedAuthority("ROLE_".concat(role.getRole().name())))
                     .collect(Collectors.toSet());
 
-            System.out.println("-> #### Retornando el User ###");
+            for(GrantedAuthority authority : authorities) {
+                System.out.println("-> " + authority.getAuthority());
+            }
+
             return new User(
                     userEntity.getEmail(),
                     userEntity.getPassword(),
@@ -45,7 +49,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     true,
                     true,
                     true,
-                    authorities);
+                    authorities
+            );
 
         } else {
             throw new UsernameNotFoundException("User " + email + " not exist");
