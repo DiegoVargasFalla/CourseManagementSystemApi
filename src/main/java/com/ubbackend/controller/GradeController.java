@@ -3,6 +3,7 @@ package com.ubbackend.controller;
 import com.ubbackend.DTO.GradeRecursionDTO;
 import com.ubbackend.model.GradeEntity;
 import com.ubbackend.services.GradeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(
+        name = "Grade controller",
+        description = "Student controller where all the endpoints are located"
+)
 @RestController
 @RequestMapping("/v1")
 public class GradeController {
