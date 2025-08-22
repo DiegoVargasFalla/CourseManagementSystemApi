@@ -20,7 +20,7 @@ public class JwtUtils {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    @Value("jwt.time.expiration")
+    @Value("${jwt.time.expiration}")
     private String expiration;
 
     public String generateToken(User user) {
