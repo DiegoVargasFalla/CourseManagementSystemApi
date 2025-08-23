@@ -19,13 +19,13 @@ import org.springframework.http.HttpHeaders;
         ),
         servers = {
                 @Server(
-                        description = "Dev server",
+                        description = "Dev server, local",
                         url = "http://localhost:8080/system/api"
                 ),
-                @Server(
-                        description = "Prod server",
-                        url = "https://diegodev.net:8080"
-                )
+//                @Server(
+//                        description = "Prod server",
+//                        url = "https://diegodev.net:8080"
+//                )
         },
         security = @SecurityRequirement(
                 name = "Security token"
