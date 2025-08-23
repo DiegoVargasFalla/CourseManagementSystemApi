@@ -21,6 +21,10 @@ public class DataInitializer implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Este metodo carga el usuario super admin por primera vez, si la base de datos esta vacia
+     * @param args
+     */
     @Override
     public void run(String... args) {
 
