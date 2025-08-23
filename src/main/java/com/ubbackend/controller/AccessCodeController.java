@@ -75,8 +75,8 @@ public class AccessCodeController {
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
-                                            type = "String",
-                                            implementation = AccessCodeCreatedDTO.class
+                                            type = "int",
+                                            implementation = Long.class
                                     )
                             )
                     ),
@@ -103,13 +103,12 @@ public class AccessCodeController {
             }
     )
     @PostMapping("/access-code")
-    public ResponseEntity<?> generateAccessCode(@RequestBody AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
+    public ResponseEntity<String> generateAccessCode(@RequestBody AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
         Optional<Long> accessCodeEntity = accessCodeService.generateAccessCode(accessCodeCreatedDTO);
-        if(accessCodeEntity.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(accessCodeEntity.get().toString());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return accessCodeEntity
+                .map(aLong -> ResponseEntity.status(HttpStatus.CREATED).body(aLong.toString()))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @Operation(
