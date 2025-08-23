@@ -46,6 +46,16 @@ public class AccessCodeController {
                                             implementation = AccessCodeEntity.class
                                     )
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
                     )
             }
     )
@@ -74,6 +84,16 @@ public class AccessCodeController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "The Access Code could not be generated, please check if the user is present",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
@@ -109,6 +129,16 @@ public class AccessCodeController {
                     @ApiResponse(
                             responseCode = "404",
                             description = "The Access Code was not be found",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
