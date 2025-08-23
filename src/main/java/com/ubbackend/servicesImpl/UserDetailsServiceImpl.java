@@ -23,10 +23,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Este metodo es usado para cargar el usuario que se esta autenticando,
+     * es manejado internamente por spring boot
+     * @param email
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("-> ingresando a loadByUsername");
 
         Optional<UserEntity> user = userRepository.findByEmail(email);
 
@@ -37,10 +43,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .stream()
                     .map( role -> new SimpleGrantedAuthority("ROLE_".concat(role.getRole().name())))
                     .collect(Collectors.toSet());
-
-            for(GrantedAuthority authority : authorities) {
-                System.out.println("-> " + authority.getAuthority());
-            }
 
             return new User(
                     userEntity.getEmail(),
