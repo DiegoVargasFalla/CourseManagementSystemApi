@@ -1,7 +1,6 @@
 package com.ubbackend.controller;
 
 import com.ubbackend.DTO.AccessCodeCreatedDTO;
-import com.ubbackend.DTO.AccessCodeResponseDTO;
 import com.ubbackend.model.AccessCodeEntity;
 import com.ubbackend.services.AccessCodeService;
 
@@ -35,7 +34,7 @@ public class AccessCodeController {
 
     @Operation(
             summary = "fetch all Access Codes",
-            description = "This method return all Generated Access Codes",
+            description = "This method return a list with all Generated Access Codes",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -44,17 +43,7 @@ public class AccessCodeController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
                                             type = "array",
-                                            implementation = AccessCodeResponseDTO.class
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal server error",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorResponse.class
+                                            implementation = AccessCodeEntity.class
                                     )
                             )
                     )
@@ -76,23 +65,15 @@ public class AccessCodeController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
                                             type = "int",
-                                            implementation = Long.class
+                                            implementation = Long.class,
+                                            example = "123456",
+                                            defaultValue = "123456"
                                     )
                             )
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "The Access Code could not be generated, please check if the user is present",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorResponse.class
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal server error",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
@@ -112,8 +93,8 @@ public class AccessCodeController {
     }
 
     @Operation(
-            summary = "generate Access Code",
-            description = "This method generates one Access Code and returns it",
+            summary = "Cancel Access Code",
+            description = "This method cancel Access Code and returns it",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -121,8 +102,7 @@ public class AccessCodeController {
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
-                                            type = "String",
-                                            implementation = AccessCodeResponseDTO.class
+                                            implementation = AccessCodeEntity.class
                                     )
                             )
                     ),
@@ -135,25 +115,14 @@ public class AccessCodeController {
                                             implementation = ErrorResponse.class
                                     )
                             )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal server error",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorResponse.class
-                                    )
-                            )
                     )
             }
     )
     @PatchMapping("/codes/{id}")
-    public ResponseEntity<?> cancelAccessCode(@PathVariable Long id) throws Exception {
+    public ResponseEntity<AccessCodeEntity> cancelAccessCode(@PathVariable Long id) throws Exception {
         Optional<AccessCodeEntity> accessCodeEntity = accessCodeService.cancelAccessCode(id);
-        if(accessCodeEntity.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(accessCodeEntity.get());
+        return accessCodeEntity
+                .map(codeEntity -> ResponseEntity.status(HttpStatus.OK).body(codeEntity))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
