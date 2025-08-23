@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,7 +48,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             userLoginDTO.getEmail(),
                             userLoginDTO.getPassword()
                         );
-            return getAuthenticationManager().authenticate(authenticationToken);
+
+            Authentication authentication = getAuthenticationManager().authenticate(authenticationToken);
+
+            // utilizar esta impresion para testear el metod
+            // System.out.println("-> User authenticated: " + authentication.isAuthenticated());
+
+            return authentication;
 
         } catch (RuntimeException e) {
             throw new BadCredentialsException("Invalid login request format") {};
