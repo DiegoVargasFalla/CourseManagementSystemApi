@@ -78,3 +78,7 @@ La API utiliza **JWT** para autenticación e incluye los siguientes roles:
     2. El sistema envía automáticamente un email con URL personalizada y código  
     3. El destinatario completa el registro con sus datos personales  
     4. El código tiene tiempo limitado de validez y puede ser revocado  
+
+## 📝 Licencia
+
+Este proyecto está bajo la siguiente licencia [LICENSE](LICENSE).
