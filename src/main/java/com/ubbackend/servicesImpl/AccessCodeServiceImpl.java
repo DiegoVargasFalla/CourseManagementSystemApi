@@ -17,11 +17,13 @@ import java.util.Optional;
 public class AccessCodeServiceImpl implements AccessCodeService {
 
     private final AccessCodeRepository accessCodeRepository;
+    private final MailSenderImpl mailSender;
     UserRepository userRepository;
 
-    public AccessCodeServiceImpl(UserRepository userRepository, AccessCodeRepository accessCodeRepository) {
+    public AccessCodeServiceImpl(UserRepository userRepository, AccessCodeRepository accessCodeRepository, MailSenderImpl mailSender) {
         this.userRepository = userRepository;
         this.accessCodeRepository = accessCodeRepository;
+        this.mailSender = mailSender;
     }
 
     /**
@@ -46,7 +48,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
      * una axcepcion informando que el codigo no se pudo crear
      */
     @Override
-    public Optional<Long> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
+    public Optional<String> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
         Optional<UserEntity> userExisting = userRepository.findByEmail(accessCodeCreatedDTO.getEmailCreator());
 
@@ -55,9 +57,11 @@ public class AccessCodeServiceImpl implements AccessCodeService {
             double code = 100000 + Math.random() * 900000;
 
             AccessCodeEntity accessCodeEntity = new AccessCodeEntity();
+
             accessCodeEntity.setCode(Math.round(code));
             accessCodeEntity.setActive(true);
             accessCodeEntity.setCreator(userExisting.get());
+            accessCodeEntity.setEmailRecipient(accessCodeCreatedDTO.getEmailRecipient());
 
             if(accessCodeCreatedDTO.getRolType().equals(ERol.SUPER_ADMIN.toString())) {
                 accessCodeEntity.setRoleType(ERol.SUPER_ADMIN);
@@ -66,10 +70,12 @@ public class AccessCodeServiceImpl implements AccessCodeService {
             }
 
             accessCodeRepository.save(accessCodeEntity);
-            return Optional.of(accessCodeEntity.getCode());
-        } else {
-            throw new UserExistException("Access code couldn't be create");
+
+
+            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString());
+            return Optional.of("User successfully created");
         }
+        return Optional.empty();
     }
 
     /**
