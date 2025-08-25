@@ -106,9 +106,9 @@ public class AccessCodeController {
     @PostMapping("/access-code")
     public ResponseEntity<String> generateAccessCode(@RequestBody AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
-        Optional<Long> accessCodeEntity = accessCodeService.generateAccessCode(accessCodeCreatedDTO);
+        Optional<String> accessCodeEntity = accessCodeService.generateAccessCode(accessCodeCreatedDTO);
         return accessCodeEntity
-                .map(aLong -> ResponseEntity.status(HttpStatus.CREATED).body(aLong.toString()))
+                .map(codeOk  -> ResponseEntity.status(HttpStatus.CREATED).body(codeOk))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
