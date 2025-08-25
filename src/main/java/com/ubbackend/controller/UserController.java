@@ -152,7 +152,7 @@ public class UserController {
                     )
             }
     )
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserEntityDTO userEntityDTO) throws Exception {
         Optional<UserResponseDTO> userResponseDTOExists = userService.createUser(userEntityDTO);
         return userResponseDTOExists
