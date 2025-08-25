@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface AccessCodeService {
     List<AccessCodeEntity> getAllAccessCode();
-    Optional<Long> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception;
+    Optional<String> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception;
     Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) throws Exception;
 }
