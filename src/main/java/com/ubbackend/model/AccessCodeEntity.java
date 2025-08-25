@@ -21,6 +21,8 @@ public class AccessCodeEntity {
     @JsonManagedReference
     private UserEntity creator;
 
+    private String emailRecipient;
+
     @Enumerated(EnumType.STRING)
     private ERol roleType;
 
@@ -62,5 +64,13 @@ public class AccessCodeEntity {
 
     public void setRoleType(ERol roleType) {
         this.roleType = roleType;
+    }
+
+    public String getEmailRecipient() {
+        return emailRecipient;
+    }
+
+    public void setEmailRecipient(String emailRecipient) {
+        this.emailRecipient = emailRecipient;
     }
 }
