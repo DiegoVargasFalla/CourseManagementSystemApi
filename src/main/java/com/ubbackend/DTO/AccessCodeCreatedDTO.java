@@ -1,6 +1,7 @@
 package com.ubbackend.DTO;
 
 public class AccessCodeCreatedDTO {
+    private String emailRecipient;
     private String emailCreator;
     private String rolType;
 
@@ -18,5 +19,13 @@ public class AccessCodeCreatedDTO {
 
     public void setRolType(String rolType) {
         this.rolType = rolType;
+    }
+
+    public String getEmailRecipient() {
+        return emailRecipient;
+    }
+
+    public void setEmailRecipient(String emailRecipient) {
+        this.emailRecipient = emailRecipient;
     }
 }
