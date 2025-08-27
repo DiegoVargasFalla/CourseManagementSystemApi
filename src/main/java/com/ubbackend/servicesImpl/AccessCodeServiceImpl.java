@@ -72,7 +72,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
             accessCodeRepository.save(accessCodeEntity);
 
 
-            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "https://ubcursos=ac?" + accessCodeEntity.getCode().toString());
+            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "https://ubcursos.com?ac=" + accessCodeEntity.getCode().toString());
             return Optional.of("User successfully created");
         }
         return Optional.empty();
@@ -80,13 +80,13 @@ public class AccessCodeServiceImpl implements AccessCodeService {
 
     /**
      * metodo para cancelar el codigo de acceso y que no se pueda usar
-     * @param accessCodeId atributos para cancelar el codigo de acceso
-     * @return codigo de acceso cancelado, el atributo active deve estar en false
-     * @throws Exception si el codigo no existe retornara un Optional vacio
+     * @param accessCode atributos para cancelar el codigo de acceso, se cancela
+     * por medio del mismo codigo que se envia no por id
+     * @return codigo de acceso cancelado, el atributo active debe estar en false
      */
     @Override
-    public Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) {
-        Optional<AccessCodeEntity> accessCodeEntity = accessCodeRepository.findById(accessCodeId);
+    public Optional<AccessCodeEntity> cancelAccessCode(Long accessCode) {
+        Optional<AccessCodeEntity> accessCodeEntity = accessCodeRepository.findByCode(accessCode);
         if(accessCodeEntity.isPresent()) {
             accessCodeEntity.get().setActive(false);
             AccessCodeEntity updatedAccessCodeEntity = accessCodeRepository.save(accessCodeEntity.get());
