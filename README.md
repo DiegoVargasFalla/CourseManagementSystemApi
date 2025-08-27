@@ -15,6 +15,7 @@ este es un proyecto universitario para la materia practica profesional II que pe
 - 🎯 **Relaciones Avanzadas** - Modelos con relaciones ManyToMany, OneToMany
 - 📧 **Registro Seguro** - Sistema de invitación por email para administradores
 - ⚙️ **Configuración Flexible** - Gradle como gestor de dependencias
+- ✨ **Inyección de dependecias** - Bajo acoplamiento
 
 ---
 
