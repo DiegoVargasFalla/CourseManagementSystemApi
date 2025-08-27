@@ -72,7 +72,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
             accessCodeRepository.save(accessCodeEntity);
 
 
-            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString());
+            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "https://ubcursos=ac?" + accessCodeEntity.getCode().toString());
             return Optional.of("User successfully created");
         }
         return Optional.empty();
