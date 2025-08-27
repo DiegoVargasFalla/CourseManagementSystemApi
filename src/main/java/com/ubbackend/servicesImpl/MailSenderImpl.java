@@ -39,6 +39,4 @@ public class MailSenderImpl {
         mimeMessage.setContent(htmlString, "text/html; charset=utf-8");
         mailSender.send(mimeMessage);
     }
-
-
 }
