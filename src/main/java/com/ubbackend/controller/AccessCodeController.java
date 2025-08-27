@@ -148,9 +148,9 @@ public class AccessCodeController {
                     )
             }
     )
-    @PatchMapping("/codes/{id}")
-    public ResponseEntity<AccessCodeEntity> cancelAccessCode(@PathVariable Long id) throws Exception {
-        Optional<AccessCodeEntity> accessCodeEntity = accessCodeService.cancelAccessCode(id);
+    @PatchMapping("/codes/{code}")
+    public ResponseEntity<AccessCodeEntity> cancelAccessCode(@PathVariable Long code) throws Exception {
+        Optional<AccessCodeEntity> accessCodeEntity = accessCodeService.cancelAccessCode(code);
         return accessCodeEntity
                 .map(codeEntity -> ResponseEntity.status(HttpStatus.OK).body(codeEntity))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
