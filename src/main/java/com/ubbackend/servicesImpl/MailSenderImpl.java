@@ -19,7 +19,7 @@ public class MailSenderImpl {
         this.mailSender = mailSender;
     }
 
-    public void sendMail(String to, String subject, String text) throws MessagingException, IOException {
+    public void sendMail(String to, String subject, String text, String url) throws MessagingException, IOException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         mimeMessage.setFrom(new InternetAddress("cursosaub@gmail.com"));
@@ -33,7 +33,8 @@ public class MailSenderImpl {
             html.append(c);
         }
 
-        String htmlString = html.toString().replace("%ACCESS_CODE%", text);
+        String htmlString = html.toString().replace("%ACCESS_CODE%", text).replace("%URL%", url);
+
 
         mimeMessage.setContent(htmlString, "text/html; charset=utf-8");
         mailSender.send(mimeMessage);
