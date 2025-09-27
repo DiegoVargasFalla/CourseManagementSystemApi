@@ -112,8 +112,6 @@ public class StudentServiceImpl implements StudentService {
                 if(student.getId().equals(idStudent)) {
                     studentRepository.delete(student);
                     return true;
-                } else {
-                    return false;
                 }
             }
         }

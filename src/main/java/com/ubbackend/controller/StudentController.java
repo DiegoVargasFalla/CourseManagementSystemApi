@@ -206,7 +206,7 @@ public class StudentController {
                     )
             ) @PathVariable Long idCourse) {
         if(!studentService.deleteStudent(idStudent, idCourse)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or course does´t exist");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully");
     }
