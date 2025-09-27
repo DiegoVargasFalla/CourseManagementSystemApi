@@ -183,10 +183,10 @@ public class StudentController {
                     )
             }
     )
-    @DeleteMapping("/students/{id}")
+    @DeleteMapping("/students/{idStudent}/course/{idCourse}")
     public ResponseEntity<String> deleteStudent(
             @Parameter(
-                    name = "id",
+                    name = "idStudent",
                     description = "The student id",
                     required = true,
                     schema = @Schema(
@@ -194,8 +194,18 @@ public class StudentController {
                             description = "Param ID student that needs to be removed",
                             allowableValues = {"1", "2", "3"}
                     )
-    ) @PathVariable Long id) {
-        if(!studentService.deleteStudent(id)) {
+    ) @PathVariable Long idStudent,
+            @Parameter(
+                    name = "idCourse",
+                    description = "The cours id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID course that needs to be removed",
+                            allowableValues = {"1", "2", "3"}
+                    )
+            ) @PathVariable Long idCourse) {
+        if(!studentService.deleteStudent(idStudent, idCourse)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully");

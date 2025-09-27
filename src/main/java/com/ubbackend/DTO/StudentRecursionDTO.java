@@ -94,6 +94,7 @@ public class StudentRecursionDTO {
         this.id = studentEntity.getId();
         this.name = studentEntity.getName();
         this.lastName = studentEntity.getLastName();
+        this.email = studentEntity.getEmail();
         this.dni = studentEntity.getDni();
         this.numSemester = studentEntity.getNumSemester();
         this.average = studentEntity.getAverage();

@@ -103,12 +103,21 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean deleteStudent(Long id) {
-        if(!studentRepository.existsById(id)){
-            return false;
+    public boolean deleteStudent(Long idStudent, Long idCourse) {
+        Optional<CourseEntity> courseExisting = courseRepository.findById(idCourse);
+
+        if(courseExisting.isPresent()) {
+            CourseEntity courseEntity = courseExisting.get();
+            for(StudentEntity student: courseEntity.getStudents()) {
+                if(student.getId().equals(idStudent)) {
+                    studentRepository.delete(student);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
-        studentRepository.deleteById(id);
-        return true;
+        return false;
     }
 
     /**
