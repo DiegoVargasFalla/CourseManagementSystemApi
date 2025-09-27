@@ -159,59 +159,6 @@ public class StudentController {
     }
 
     @Operation(
-            summary = "Delete a student",
-            description = "Method to remove a student whit the id",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Student successfully deleted",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = String.class,
-                                            description = "Info message that student was deleted"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "The user id doesn't exist",
-                            content =  @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ErrorResponse.class)
-                            )
-                    )
-            }
-    )
-    @DeleteMapping("/students/{idStudent}/course/{idCourse}")
-    public ResponseEntity<String> deleteStudent(
-            @Parameter(
-                    name = "idStudent",
-                    description = "The student id",
-                    required = true,
-                    schema = @Schema(
-                            type = "Integer",
-                            description = "Param ID student that needs to be removed",
-                            allowableValues = {"1", "2", "3"}
-                    )
-    ) @PathVariable Long idStudent,
-            @Parameter(
-                    name = "idCourse",
-                    description = "The cours id",
-                    required = true,
-                    schema = @Schema(
-                            type = "Integer",
-                            description = "Param ID course that needs to be removed",
-                            allowableValues = {"1", "2", "3"}
-                    )
-            ) @PathVariable Long idCourse) {
-        if(!studentService.deleteStudent(idStudent, idCourse)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or course does´t exist");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully");
-    }
-
-    @Operation(
             summary = "Update student",
             description = "Method to update student",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
