@@ -12,6 +12,7 @@ import com.ubbackend.services.CourseService;
 
 import java.util.ArrayList;
 
+import com.ubbackend.services.StudentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,20 +179,23 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public Optional<CourseRecursionDTO> deleteStudentFromCourse(NewStudentDTO studentDTO) {
 
-        Optional<StudentEntity> studentExisting = studentRepository.findByDni(studentDTO.getDni());
         Optional<CourseEntity> courseExisting = courseRepository.findById(studentDTO.getCourseId());
 
-        if(studentExisting.isPresent() && courseExisting.isPresent()) {
-            StudentEntity studentEntity = studentExisting.get();
+        if(courseExisting.isPresent()) {
             CourseEntity courseEntity = courseExisting.get();
+            for(StudentEntity student : courseEntity.getStudents()) {
+                if (student.getDni().equals(studentDTO.getDni())) {
+                    courseEntity.getStudents().remove(student);
 
-            courseEntity.getStudents().remove(studentEntity);
-            CourseEntity courseEntityUpdate =  courseRepository.save(courseEntity);
+                    CourseEntity courseEntityUpdate =  courseRepository.save(courseEntity);
 
-            CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
-            courseRecursionDTO.toCourseRecursionDTO(courseEntityUpdate);
+                    CourseRecursionDTO courseRecursionDTO = new CourseRecursionDTO();
+                    courseRecursionDTO.toCourseRecursionDTO(courseEntityUpdate);
 
-            return Optional.of(courseRecursionDTO);
+                    return Optional.of(courseRecursionDTO);
+                }
+            }
+            // return Optional.empty();
         }
         return Optional.empty();
     }
