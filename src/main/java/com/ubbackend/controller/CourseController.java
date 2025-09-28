@@ -288,14 +288,6 @@ public class CourseController {
     @Operation(
             summary = "delete a student from one course",
             description = "Method to delete a student from one course",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "this method receive a class with all attributes to deleted a student from one course.",
-                    required = true,
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = NewStudentDTO.class)
-                    )
-            ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -305,6 +297,7 @@ public class CourseController {
                                     schema = @Schema(
                                             implementation = CourseRecursionDTO.class,
                                             description = "The student added"
+
                                     )
                             )
                     ),
@@ -319,7 +312,27 @@ public class CourseController {
             }
     )
     @DeleteMapping("/courses/{courseId}/students/{studentDni}")
-    public ResponseEntity<?> deleteStudentFromCourse(@PathVariable Long courseId, @PathVariable Long studentDni) {
+    public ResponseEntity<?> deleteStudentFromCourse(
+            @Parameter(
+                    name = "courseId",
+                    description = "The course id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID course that the student needs to be removed",
+                            allowableValues = {"1", "2", "3"}
+                    )
+            ) @PathVariable Long courseId,
+            @Parameter(
+                    name = "studentDni",
+                    description = "The student id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID student that needs to be removed",
+                            allowableValues = {"1", "2", "3"}
+                    )
+            ) @PathVariable Long studentDni) {
         NewStudentDTO newStudentDTO = new NewStudentDTO();
         newStudentDTO.setCourseId(courseId);
         newStudentDTO.setDni(studentDni);
