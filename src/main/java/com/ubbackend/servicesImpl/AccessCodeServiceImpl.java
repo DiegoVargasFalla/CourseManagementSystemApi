@@ -10,6 +10,8 @@ import com.ubbackend.repository.UserRepository;
 import com.ubbackend.services.AccessCodeService;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +74,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
             accessCodeRepository.save(accessCodeEntity);
 
 
-            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "https://ubcursos.com?ac=" + accessCodeEntity.getCode().toString());
+            mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "http://localhost/register:8080?ac=" + URLEncoder.encode(accessCodeEntity.getCode().toString(), StandardCharsets.UTF_8));
             return Optional.of("User successfully created");
         }
         return Optional.empty();

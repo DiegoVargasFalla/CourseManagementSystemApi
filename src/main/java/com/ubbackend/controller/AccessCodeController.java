@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -104,6 +105,7 @@ public class AccessCodeController {
             }
     )
     @PostMapping("/access-code")
+    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<String> generateAccessCode(@RequestBody AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
         Optional<String> accessCodeEntity = accessCodeService.generateAccessCode(accessCodeCreatedDTO);
