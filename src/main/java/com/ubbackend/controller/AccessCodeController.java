@@ -105,7 +105,6 @@ public class AccessCodeController {
             }
     )
     @PostMapping("/access-code")
-    // @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<String> generateAccessCode(@RequestBody AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
         Optional<String> accessCodeEntity = accessCodeService.generateAccessCode(accessCodeCreatedDTO);
