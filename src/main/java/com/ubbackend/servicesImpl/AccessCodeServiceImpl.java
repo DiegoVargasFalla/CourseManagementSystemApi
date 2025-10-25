@@ -9,6 +9,7 @@ import com.ubbackend.repository.AccessCodeRepository;
 import com.ubbackend.repository.UserRepository;
 import com.ubbackend.services.AccessCodeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -50,6 +51,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
      * una axcepcion informando que el codigo no se pudo crear
      */
     @Override
+    @Transactional
     public Optional<String> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception {
 
         Optional<UserEntity> userExisting = userRepository.findByEmail(accessCodeCreatedDTO.getEmailCreator());
