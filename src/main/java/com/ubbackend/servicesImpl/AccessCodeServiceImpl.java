@@ -77,7 +77,7 @@ public class AccessCodeServiceImpl implements AccessCodeService {
 
 
             mailSender.sendMail(accessCodeCreatedDTO.getEmailRecipient(), "Codigo de registro", accessCodeEntity.getCode().toString(), "http://localhost/register:8080?ac=" + URLEncoder.encode(accessCodeEntity.getCode().toString(), StandardCharsets.UTF_8));
-            return Optional.of("User successfully created");
+            return Optional.of("AccessCode successfully created");
         }
         return Optional.empty();
     }
