@@ -3,11 +3,14 @@ package com.ubbackend.servicesImpl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import static org.antlr.v4.runtime.misc.Utils.readFile;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 
 @Service
 public class MailSenderImpl {
@@ -25,17 +28,19 @@ public class MailSenderImpl {
         mimeMessage.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(to));
         mimeMessage.setSubject(subject);
 
-        char[] htmlTemplate = readFile("src/main/resources/static/index.html");
-        StringBuilder html = new StringBuilder();
+        ClassPathResource resource = new ClassPathResource("static/index.html");
+        try (InputStream in = resource.getInputStream()) {
+            String html = new String(in.readAllBytes(), StandardCharsets.UTF_8);
 
-        for(char c : htmlTemplate) {
-            html.append(c);
+            StringBuilder htmlBuilder = new StringBuilder();
+
+            for(char c : html.toCharArray()) {
+                htmlBuilder.append(c);
+            }
+
+            String htmlString = htmlBuilder.toString().replace("%ACCESS_CODE%", text).replace("%URL%", url);
+            mimeMessage.setContent(htmlString, "text/html; charset=utf-8");
+            mailSender.send(mimeMessage);
         }
-
-        String htmlString = html.toString().replace("%ACCESS_CODE%", text).replace("%URL%", url);
-
-
-        mimeMessage.setContent(htmlString, "text/html; charset=utf-8");
-        mailSender.send(mimeMessage);
     }
 }
