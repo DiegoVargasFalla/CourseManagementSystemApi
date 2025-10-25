@@ -7,6 +7,7 @@ import com.ubbackend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,7 @@ public class DataInitializer implements CommandLineRunner {
      * @param args
      */
     @Override
+    @Transactional
     public void run(String... args) {
 
         if(userRepository.count() == 0) {
