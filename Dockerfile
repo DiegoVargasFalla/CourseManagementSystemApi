@@ -5,7 +5,7 @@ USER root
 WORKDIR /app
 
 # Copiamos el proyecto completo
-COPY . .
+COPY src .
 
 # Construir el .jar sin ejecutar los tests
 RUN gradle --no-daemon clean build -x test
