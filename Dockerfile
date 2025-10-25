@@ -18,7 +18,7 @@ WORKDIR /app
 # Copiar solo el .jar generado
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 # Ejecutar la aplicación
 CMD ["java", "-jar", "app.jar"]
