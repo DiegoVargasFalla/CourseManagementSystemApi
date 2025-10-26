@@ -111,8 +111,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<StudentRecursionDTO> updateStudent(Long id, StudentUpdateDTO studentUpdateDTO) {
         Optional<StudentEntity> studentExisting = studentRepository.findById(id);
-        
-        if(studentExisting.isPresent()){
+
+        System.out.println("lastname: " + studentUpdateDTO.getLastName());
+
+        if(studentExisting.isPresent()) {
             StudentEntity student = studentExisting.get();
 
             if(studentUpdateDTO.getName() != null){
@@ -122,14 +124,15 @@ public class StudentServiceImpl implements StudentService {
                 student.setLastName(studentUpdateDTO.getLastName());
             }
             if(studentUpdateDTO.getEmail() != null){
-                student.setLastName(studentUpdateDTO.getLastName());
+                student.setEmail(studentUpdateDTO.getEmail());
             }
             if(studentUpdateDTO.getNumSemester() != 0){
                 student.setNumSemester(studentUpdateDTO.getNumSemester());
             }
             if(studentUpdateDTO.getDni() != 0){
                 student.setDni(studentUpdateDTO.getDni());
-            } if(studentUpdateDTO.getAverage() != 0) {
+            }
+            if(studentUpdateDTO.getAverage() != 0) {
                 student.setAverage(studentUpdateDTO.getAverage());
             }
 
