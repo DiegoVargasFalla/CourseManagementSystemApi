@@ -12,6 +12,16 @@ public class StudentUpdateDTO {
 
     private int numSemester;
 
+    private Float average;
+
+    public Float getAverage() {
+        return average;
+    }
+
+    public void setAverage(Float average) {
+        this.average = average;
+    }
+
     public String getName() {
         return name;
     }

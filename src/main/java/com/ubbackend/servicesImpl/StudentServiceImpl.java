@@ -129,6 +129,8 @@ public class StudentServiceImpl implements StudentService {
             }
             if(studentUpdateDTO.getDni() != 0){
                 student.setDni(studentUpdateDTO.getDni());
+            } if(studentUpdateDTO.getAverage() != 0) {
+                student.setAverage(studentUpdateDTO.getAverage());
             }
 
             StudentEntity studentEntity = studentRepository.save(student);
