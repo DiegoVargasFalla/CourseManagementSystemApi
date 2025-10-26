@@ -20,7 +20,7 @@ import org.springframework.http.HttpHeaders;
         servers = {
                 @Server(
                         description = "Dev server, local",
-                        url = "http://localhost:8080/system/api"
+                        url = "http://localhost:8080/api"
                 ),
 //                @Server(
 //                        description = "Prod server",
