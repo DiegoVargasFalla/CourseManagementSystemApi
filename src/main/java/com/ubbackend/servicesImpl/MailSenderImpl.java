@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 
@@ -21,7 +22,7 @@ public class MailSenderImpl {
         this.mailSender = mailSender;
     }
 
-    public void sendMail(String to, String subject, String text, String url) throws MessagingException, IOException {
+    public void sendMail(String to, String subject, String text, String url, Charset utf8) throws MessagingException, IOException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         mimeMessage.setFrom(new InternetAddress("cursosaub@gmail.com"));
