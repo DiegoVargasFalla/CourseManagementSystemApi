@@ -17,7 +17,7 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://paginaweb-ub-git-main-gonzalos-projects-87f9e673.vercel.app", "https://iviva06.github.io/PaginaWeb/"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://paginaweb-ub-git-main-gonzalos-projects-87f9e673.vercel.app", "https://iviva06.github.io"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
