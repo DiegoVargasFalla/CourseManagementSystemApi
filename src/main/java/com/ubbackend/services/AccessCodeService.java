@@ -10,4 +10,5 @@ public interface AccessCodeService {
     List<AccessCodeEntity> getAllAccessCode();
     Optional<String> generateAccessCode(AccessCodeCreatedDTO accessCodeCreatedDTO) throws Exception;
     Optional<AccessCodeEntity> cancelAccessCode(Long accessCodeId) throws Exception;
+    boolean checkAccessCode(Long code) throws Exception;
 }

@@ -5,6 +5,7 @@ import com.ubbackend.model.AccessCodeEntity;
 import com.ubbackend.services.AccessCodeService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -155,5 +156,56 @@ public class AccessCodeController {
         return accessCodeEntity
                 .map(codeEntity -> ResponseEntity.status(HttpStatus.OK).body(codeEntity))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+    @Operation(
+            summary = "check access code",
+            description = "This method checks access code and returns bool",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "type value bool",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = Boolean.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "The Access Code was not be found",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorResponse.class
+                                    )
+                            )
+                    )
+            }
+    )
+    @GetMapping("/codes/check-access-code/{code}")
+    public ResponseEntity<Boolean> checkAccessCode(
+            @Parameter(
+                    name = "access code",
+                    description = "The user id",
+                    required = true,
+                    schema = @Schema(
+                            type = "Integer",
+                            description = "Param ID user that needs to be updated",
+                            allowableValues = {"1", "2", "3"}
+                    )
+            )
+            @PathVariable Long code) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(accessCodeService.checkAccessCode(code));
     }
 }

@@ -99,4 +99,10 @@ public class AccessCodeServiceImpl implements AccessCodeService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public boolean checkAccessCode(Long code) throws Exception {
+        Optional<AccessCodeEntity> accessCodeEntity = accessCodeRepository.findByCode(code);
+        return accessCodeEntity.isPresent();
+    }
 }

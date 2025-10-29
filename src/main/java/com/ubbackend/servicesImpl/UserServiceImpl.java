@@ -110,9 +110,11 @@ public class UserServiceImpl implements UserService {
                     return Optional.of(extractUser(user));
                 }
                 else {
+                    System.out.println("-> Error 1");
                     throw new ResourceNotCreatedException("Access code has expired");
                 }
             } else {
+                System.out.println("-> Error 2");
                 throw new ResourceNotFoundException("Access code not found");
             }
         }

@@ -49,7 +49,8 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
-                                        "/v1/users").permitAll()
+                                        "/v1/users",
+                                        "v1/codes/check-access-code/{code}").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().authenticated()
                 )
