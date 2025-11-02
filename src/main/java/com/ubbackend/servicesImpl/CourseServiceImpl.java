@@ -195,7 +195,6 @@ public class CourseServiceImpl implements CourseService {
                     return Optional.of(courseRecursionDTO);
                 }
             }
-            // return Optional.empty();
         }
         return Optional.empty();
     }
